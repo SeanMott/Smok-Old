@@ -1,5 +1,5 @@
 # Smok
-Smok (Polish for dragon) is a game engine, it is built with 2D and 3D in mind while using ECS. The engine is being created as a learning experience.
+Smok (Polish for dragon) is a game engine for 3D with ECS. The engine is being created as a learning experience.
 
 # Libraries
 - [GLM - Math](http://glm.g-truc.net/0.9.8/index.html)
