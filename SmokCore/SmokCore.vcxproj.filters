@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS">
+      <UniqueIdentifier>{780F99C2-64DC-F3CD-8DF5-E1757921295C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ECS\Components">
+      <UniqueIdentifier>{8D59B2E2-F9BA-8FF0-8228-D6A2EE88C6AF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Events">
+      <UniqueIdentifier>{52201B74-BED5-9369-47CA-8D40B37E8A6D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Window">
+      <UniqueIdentifier>{D1E05B2F-3D6C-C9F3-467D-4CE8B28725F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{7CCE658F-689B-C09A-91B4-AE427DE0F528}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Assets">
+      <UniqueIdentifier>{DE71E7D6-4AFD-549B-530E-D88FBF18B19B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RenderAPI">
+      <UniqueIdentifier>{A5345A4C-9118-1BA2-FA78-15F5E67B0524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\RenderAPI\Opengl">
+      <UniqueIdentifier>{7996222B-E558-56B5-2E09-E5419A0A2F93}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Core\Application.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ECS\Components\Transform.h">
+      <Filter>Core\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ECS\EntityManager.h">
+      <Filter>Core\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\EngineEvents.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\InputEvents.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Events\WindowEvents.h">
+      <Filter>Core\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Input.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Keycodes.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Logger.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Window\WindowDisplay.h">
+      <Filter>Platform\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Window\WindowInput.h">
+      <Filter>Platform\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Assets\Shader.h">
+      <Filter>Renderer\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Assets\Texture.h">
+      <Filter>Renderer\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\BufferLayout.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Display.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\GraphicContext.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\IndexBuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\Opengl\OpenglGraphicContext.h">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\Opengl\OpenglIndexBuffer.h">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\Opengl\OpenglShader.h">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\Opengl\OpenglTexture.h">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\Opengl\OpenglVertexBuffer.h">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RenderAPI\RenderAPI.h">
+      <Filter>Renderer\RenderAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\ShaderDataType.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\VertexBuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\smpch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core\Application.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\ECS\EntityManager.cpp">
+      <Filter>Core\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Events\EngineEvents.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Events\InputEvents.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Events\WindowEvents.cpp">
+      <Filter>Core\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Window\WindowDisplay.cpp">
+      <Filter>Platform\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Window\WindowInput.cpp">
+      <Filter>Platform\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Assets\Shader.cpp">
+      <Filter>Renderer\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Assets\Texture.cpp">
+      <Filter>Renderer\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\GraphicContext.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\IndexBuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\Opengl\OpenglGraphicContext.cpp">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\Opengl\OpenglIndexBuffer.cpp">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\Opengl\OpenglShader.cpp">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\Opengl\OpenglTexture.cpp">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\Opengl\OpenglVertexBuffer.cpp">
+      <Filter>Renderer\RenderAPI\Opengl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RenderAPI\RenderAPI.cpp">
+      <Filter>Renderer\RenderAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\ShaderDataType.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\VertexBuffer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\smpch.cpp" />
+  </ItemGroup>
+</Project>
