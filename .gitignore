@@ -1,4 +1,5 @@
 *.vcxproj
 *.user
 *.sln
-.sin
+*.sin
+*.filters
