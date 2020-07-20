@@ -17,11 +17,13 @@ includeDir["stb"] = "Library/stb"
 includeDir["glm"] = "Library/glm"
 includeDir["FastDelegate"] = "Library/FastDelegate"
 includeDir["entt"] = "Library/entt/src"
+includeDir["ImGUI"] = "Library/imgui"
 
 --includes the premake files
 include "Library/GLFW"
 include "Library/Glad"
 include "Library/stb"
+include "Library/ImGui"
 
 --Smok Core is the main lib and the core of the engine
 project "SmokCore"
@@ -51,6 +53,7 @@ project "SmokCore"
         "%{includeDir.stb}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
+        "%{includeDir.ImGUI}",
         "SmokCore/src"
     }
     
@@ -59,6 +62,7 @@ project "SmokCore"
         "StbImage",
         "Glad",
         "GLFW",
+        "ImGui",
         "opengl32.lib"
     }
 
@@ -112,6 +116,7 @@ project "SmokGUI"
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
+        "%{includeDir.ImGUI}",
         "SmokCore/src",
         "SmokGUI/src"
     }
