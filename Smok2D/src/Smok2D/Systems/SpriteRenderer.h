@@ -16,6 +16,8 @@ private:
 
 	static Shader* lastShader;
 	static Texture* lastTexture;
+	static std::string lastShaderName;
+	static std::string lastTextureName;
 
 	static VertexBuffer* spriteBuffer;
 	static IndexBuffer* spriteIndexBuffer;

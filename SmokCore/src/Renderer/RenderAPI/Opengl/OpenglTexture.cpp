@@ -5,6 +5,8 @@
 
 using namespace std;
 
+//static bool isFlipped = false;
+
 //Constructor
 OpenglTexture::OpenglTexture(const std::string& filePath)
 {
@@ -22,8 +24,13 @@ OpenglTexture::OpenglTexture(const std::string& filePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // load image, create texture and generate mipmaps
-    stbi_set_flip_vertically_on_load(true);
+    /* load image, create texture and generate mipmaps
+    if (!isFlipped)
+    {
+        stbi_set_flip_vertically_on_load(true);
+        isFlipped = true;
+    }
+    */
 
     unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
     if (data)

@@ -53,7 +53,6 @@ project "SmokCore"
         "%{includeDir.stb}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
-        "%{includeDir.ImGUI}",
         "SmokCore/src"
     }
     
@@ -62,7 +61,6 @@ project "SmokCore"
         "StbImage",
         "Glad",
         "GLFW",
-        "ImGui",
         "opengl32.lib"
     }
 
@@ -128,7 +126,8 @@ project "SmokGUI"
     
     links
     {
-        "SmokCore"
+        "SmokCore",
+        "ImGui"
     }
 
     filter "system:windows"
@@ -270,8 +269,8 @@ project "Smok3D"
         defines "SMOK_DIST"
         optimize "On"
 
-project "Sandbox"
-    location "Sandbox"
+project "Editor"
+    location "Editor"
     kind "ConsoleApp"
     language "C++"
 

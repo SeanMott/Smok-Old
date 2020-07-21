@@ -20,6 +20,8 @@ OpenglShader::OpenglShader(const string& vertexFilePath, const string& fragmentF
 	//clean up
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+
+	glUseProgram(id);
 }
 
 //Constructor || geometry

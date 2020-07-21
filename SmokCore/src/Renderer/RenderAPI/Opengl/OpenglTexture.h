@@ -24,6 +24,7 @@ public:
 
 	// Inherited via Texture
 	inline void Destroy() override { glDeleteTextures(1, &id); }
+	inline unsigned int GetID() override { return id; }
 	void Bind(unsigned int slot = 0) override;
 	inline void UnBind() override { glBindTexture(GL_TEXTURE_2D, 0); }
 };

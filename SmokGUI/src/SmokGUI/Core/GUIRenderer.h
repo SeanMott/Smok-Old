@@ -37,7 +37,7 @@ private:
 public:
 
 	//inits the renderer
-	static void Init(GUIStyle style = GUIStyle::Dark);
+	static void Init();
 	//destroys the renderer
 	static void Destroy();
 
@@ -46,8 +46,14 @@ public:
 	//ends a section of render code
 	static void End();
 
+	//starts dock space
+
+	static void DockSpace(bool* p_open);
+
 	//updates the GUI flags for ImGUI
 	static void UpdateImGUIFlags();
+	//updates the style
+	static void SetStyle(GUIStyle style = GUIStyle::Dark);
 
 	//returns the context
 	static inline ImGUIContext* GetContext() { return context; }

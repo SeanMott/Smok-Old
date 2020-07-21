@@ -1,15 +1,14 @@
 #include <smpch.h>
 #include "SpriteRenderer.h"
 
+#include <Core\AssetManager.h>
 #include <Core\ECS\EntityManager.h>
 #include <Core\ECS\Components\Transform.h>
 #include "Smok2D\Components\OrthographicCamera.h"
 #include "Smok2D\Components\Sprite.h"
 
 #include <Renderer\Display.h>
-
 #include <Renderer\BufferLayout.h>
-
 #include <Core\Events\EngineEvents.h>
 
 #include <gtc/matrix_transform.hpp>
@@ -18,6 +17,9 @@ using namespace glm; using namespace std;
 
 Shader* SpriteRenderer::lastShader = nullptr;
 Texture* SpriteRenderer::lastTexture = nullptr;
+
+string SpriteRenderer::lastShaderName = "";
+string SpriteRenderer::lastTextureName = "";
 
 VertexBuffer* SpriteRenderer::spriteBuffer = nullptr;
 IndexBuffer* SpriteRenderer::spriteIndexBuffer = nullptr;
@@ -114,7 +116,7 @@ void SpriteRenderer::Render()
 		//auto& trans = c.get<Transform>(cam);
 
 		projection = ortho(0.0f, camera.viewLength, camera.viewHeight, 0.0f, -1.0f, 1.0f);
-		//view = 
+		//cal view for cam position
 	}
 
 	//render entities
@@ -127,9 +129,10 @@ void SpriteRenderer::Render()
 			continue;
 		auto& trans = entities.get<Transform>(entity);
 
-		if (lastShader != sprite.shader)
+		if (lastShaderName != sprite.shader)
 		{
-			lastShader = sprite.shader;
+			lastShaderName = sprite.shader;
+			lastShader = AssetManager::GetShader(lastShaderName);
 			if (lastShader == nullptr)
 			{
 				Logger::LogMessage("Not all entites with a active Sprite component has a shader assigned.");
@@ -139,9 +142,10 @@ void SpriteRenderer::Render()
 			lastShader->Bind();
 		}
 
-		if (lastTexture != sprite.texture)
+		if (lastTextureName != sprite.texture)
 		{
-			lastTexture = sprite.texture;
+			lastTextureName = sprite.texture;
+			lastTexture = AssetManager::GetTexture(lastTextureName);
 			if (lastTexture)
 				lastTexture->Bind(sprite.textureSlot);
 			else

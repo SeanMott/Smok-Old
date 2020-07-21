@@ -14,7 +14,7 @@ struct Entity
 {
 	std::string name = "Entity";
 	entt::entity entity;
-	std::string layer = "Base";
+	//std::string layer = "Base";
 
 	Entity(const std::string n, entt::entity& e)
 	{

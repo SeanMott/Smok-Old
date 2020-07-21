@@ -57,6 +57,10 @@ private:
 	static std::vector<fastdelegate::DelegateMemento> methods;
 	static fastdelegate::FastDelegate0<void> system;
 
+	//the begin and end of the Smok GUI Renderer
+	static fastdelegate::FastDelegate0<void> begin;
+	static fastdelegate::FastDelegate0<void> end;
+
 	//methods
 public:
 
@@ -64,7 +68,6 @@ public:
 	template<typename ClassInstance, typename MethodName>
 	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
 	{
-		//system.bind(methodName);
 		system.bind(classInstance, methodName);
 		methods.emplace_back(system.GetMemento());
 	}
@@ -79,16 +82,29 @@ public:
 
 	//removes a method
 
+	//binds the needed renderer methods || only used by the Smok GUI renderer
+	template<typename BeginMethod, typename EndMethod>
+	static inline void RendererBind(BeginMethod beginMethod, EndMethod endMethod)
+	{
+		begin.bind(beginMethod);
+		end.bind(endMethod);
+	}
+
 	//calls all methods
 	static inline void Call()
 	{
 		if (methods.size() > 0)
 		{
+			begin(); //calls Smok GUI GUI Renderer begin
+
 			for (unsigned int i = 0; i < methods.size(); i++)
 			{
+
 				system.SetMemento(methods[i]);
 				system();
 			}
+
+			end(); //calls Smok GUI GUI Renderer end
 		}
 	}
 };

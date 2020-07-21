@@ -10,3 +10,7 @@ fastdelegate::FastDelegate0<void> ECSSystemEvent::system;
 fastdelegate::FastDelegate0<void> ECSGUIRenderEvent::system;
 fastdelegate::FastDelegate1<float> UpdateEvent::update;
 fastdelegate::FastDelegate1<float> FixedUpdateEvent::fixedUpdate;
+
+//the begin and end of the Smok GUI Renderer
+fastdelegate::FastDelegate0<void> ECSGUIRenderEvent::begin;
+fastdelegate::FastDelegate0<void> ECSGUIRenderEvent::end;

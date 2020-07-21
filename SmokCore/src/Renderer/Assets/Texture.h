@@ -14,6 +14,9 @@ public:
 	//creates a texture
 	static Texture* Create(const std::string& filePath);
 
+	//gets the texture's id
+	virtual unsigned int GetID() = 0;
+
 	//destroys a texture
 	virtual void Destroy() = 0;
 
