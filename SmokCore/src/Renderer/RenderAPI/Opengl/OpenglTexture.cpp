@@ -36,7 +36,7 @@ OpenglTexture::OpenglTexture(const std::string& filePath)
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
-        LogError("Texture", "Failed to load texture, Filepath: " + filePath);
+        Logger::LogError("Texture", "Failed to load texture, Filepath: " + filePath);
 
     stbi_image_free(data);
 }

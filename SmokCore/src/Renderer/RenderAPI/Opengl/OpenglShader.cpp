@@ -60,7 +60,7 @@ unsigned int OpenglShader::CompileShader(unsigned int type, const string& source
 		char* message = (char*)alloca(length * sizeof(char));
 		glGetShaderInfoLog(id, length, &length, message);
 		string sType = (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment");
-		LogError("Shader", "Failed to compile " + sType + "Shader\n" + (string)message);
+		Logger::LogError("Shader", "Failed to compile " + sType + "Shader\n" + (string)message);
 
 		glDeleteShader(id);
 		return 0;

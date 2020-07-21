@@ -81,14 +81,14 @@ void SpriteRenderer::Render()
 
 	if (!spriteBuffer && !hasSentWarning)
 	{
-		LogError("Sprite Renderer", "Sprite Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
+		Logger::LogError("Sprite Renderer", "Sprite Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
 		hasSentWarning = true;
 		return;
 	}
 
 	if (!spriteIndexBuffer && !hasSentWarning)
 	{
-		LogError("Sprite Renderer", "Sprite Index Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
+		Logger::LogError("Sprite Renderer", "Sprite Index Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
 		hasSentWarning = true;
 		return;
 	}
@@ -100,7 +100,7 @@ void SpriteRenderer::Render()
 	auto c = EntityManager::GetReg().view<OrthographicCamera, Transform>();
 	if (c.size() < 1)
 	{
-		LogError("Sprite Renderer", "No Orhtographic Camera components were found, at least put one but make it inactive if you don't want it.");
+		Logger::LogError("Sprite Renderer", "No Orhtographic Camera components were found, at least put one but make it inactive if you don't want it.");
 		hasSentWarning = true;
 		return;
 	}
@@ -132,7 +132,7 @@ void SpriteRenderer::Render()
 			lastShader = sprite.shader;
 			if (lastShader == nullptr)
 			{
-				LogMessage("Not all entites with a active Sprite component has a shader assigned.");
+				Logger::LogMessage("Not all entites with a active Sprite component has a shader assigned.");
 				continue;
 			}
 

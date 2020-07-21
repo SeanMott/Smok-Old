@@ -18,21 +18,21 @@ ImGUIContext* ImGUIContext::Create()
 
 	if (type == RenderAPIType::Vulkin)
 	{
-		LogError("ImGUI Context", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogError("ImGUI Context", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinImGUIContext;
 		return new OpenglImGUIContext;
 	}
 
 	else if (type == RenderAPIType::DirectX)
 	{
-		LogError("ImGUI Context", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogError("ImGUI Context", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXImGUIContext;
 		return new OpenglImGUIContext;
 	}
 
 	else if (type == RenderAPIType::Metal)
 	{
-		LogError("ImGUI Context", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogError("ImGUI Context", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalImGUIContext;
 		return new OpenglImGUIContext;
 	}

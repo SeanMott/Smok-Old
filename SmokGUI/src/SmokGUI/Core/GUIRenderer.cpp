@@ -10,7 +10,10 @@
 #include <Core\Events\EngineEvents.h>
 #include <Core\Events\WindowEvents.h>
 
+#include <SmokGUI\ImGUIBuild.h>
+
 ImGUIContext* GUIRenderer::context = nullptr;
+bool GUIRenderer::flags[(int)GUIFlags::GUIFlagsCount]; //the flags for GUI
 
 //inits the renderer
 void GUIRenderer::Init(GUIStyle style)
@@ -19,7 +22,7 @@ void GUIRenderer::Init(GUIStyle style)
     return;
 #endif
 
-	ImGui::CreateContext();
+    ImGui::CreateContext();
 
     if (style == GUIStyle::Dark)
         ImGui::StyleColorsDark();
@@ -28,32 +31,15 @@ void GUIRenderer::Init(GUIStyle style)
     else
         ImGui::StyleColorsClassic();
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.BackendFlags != ImGuiBackendFlags_HasMouseCursors;
-	io.BackendFlags != ImGuiBackendFlags_HasSetMousePos;
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    UpdateImGUIFlags();
 
-    //temporary
-    io.KeyMap[ImGuiKey_Tab] = SMOK_KEY_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = SMOK_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = SMOK_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = SMOK_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = SMOK_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = SMOK_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown] = SMOK_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home] = SMOK_KEY_HOME;
-    io.KeyMap[ImGuiKey_End] = SMOK_KEY_END;
-    io.KeyMap[ImGuiKey_Insert] = SMOK_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = SMOK_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = SMOK_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = SMOK_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = SMOK_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape] = SMOK_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = SMOK_KEY_A;
-    io.KeyMap[ImGuiKey_C] = SMOK_KEY_C;
-    io.KeyMap[ImGuiKey_V] = SMOK_KEY_V;
-    io.KeyMap[ImGuiKey_X] = SMOK_KEY_X;
-    io.KeyMap[ImGuiKey_Y] = SMOK_KEY_Y;
-    io.KeyMap[ImGuiKey_Z] = SMOK_KEY_Z;
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
 
     context = ImGUIContext::Create();
     context->Init();
@@ -73,15 +59,36 @@ void GUIRenderer::Init(GUIStyle style)
 //destroys the renderer
 void GUIRenderer::Destroy()
 {
+#ifdef DISABLE_SMOK_GUI
+    return;
+#endif
+
     context->Destroy();
+}
+
+//updates the GUI flags for ImGUI
+void GUIRenderer::UpdateImGUIFlags()
+{
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    if (GetFlagState(GUIFlags::Keyboard))
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; //enable keyboard
+    if (GetFlagState(GUIFlags::GamePad))
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; //enable game pad
+    if (GetFlagState(GUIFlags::Docking))
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; //enable docking
+    if (GetFlagState(GUIFlags::ViewPort))
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; //enable multi viewport / windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons; //disable task bar icons
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge; //disable viewport merging
 }
 
 //starts a section of render code
 void GUIRenderer::Begin()
 {
-    ImGuiIO& io = ImGui::GetIO();
-    io.DisplaySize = ImVec2((float)DisplayI.GetScreenWidth(), (float)DisplayI.GetScreenHeight());
-    io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+#ifdef DISABLE_SMOK_GUI
+    return;
+#endif
 
     context->NewFrame();
 }
@@ -89,7 +96,24 @@ void GUIRenderer::Begin()
 //ends a section of render code
 void GUIRenderer::End()
 {
+#ifdef DISABLE_SMOK_GUI
+    return;
+#endif
+
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2((float)DisplayI.GetScreenWidth(), (float)DisplayI.GetScreenHeight());
+    io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
+
     context->Render();
+
+    //renders seprate window instances
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGUIPlatformContextType platformContext = ImGUIPlatformGetContext;
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        ImGUIPlatformMakeContext(platformContext);
+    }
 }
 
 //events

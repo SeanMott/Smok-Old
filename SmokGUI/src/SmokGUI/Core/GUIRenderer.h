@@ -5,11 +5,24 @@
 
 #include <SmokGUI\Core\ImGUIContext.h>
 
+//defines the styles for GUI
 enum class GUIStyle
 {
 	Dark,
 	Light,
 	Classic
+};
+
+//defines the flags for GUI
+enum class GUIFlags
+{
+	ViewPort = 0, //multi viewport / windows
+	Docking, //docking support
+	Keyboard, //keyboard supprot
+	GamePad, //game pad support
+
+	GUIFlagsCount //the number of flags
+
 };
 
 class GUIRenderer
@@ -18,6 +31,7 @@ class GUIRenderer
 private:
 
 	static ImGUIContext* context;
+	static bool flags[(int)GUIFlags::GUIFlagsCount]; //the flags for GUI
 
 	//methods
 public:
@@ -32,8 +46,16 @@ public:
 	//ends a section of render code
 	static void End();
 
+	//updates the GUI flags for ImGUI
+	static void UpdateImGUIFlags();
+
 	//returns the context
 	static inline ImGUIContext* GetContext() { return context; }
+
+	//sets a flag state
+	static inline void SetFlag(GUIFlags flag, bool state) { flags[(int)flag] = state; }
+	//gets the state of a flag
+	static inline bool GetFlagState(GUIFlags flag) { return flags[(int)flag]; }
 
 private:
 

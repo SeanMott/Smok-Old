@@ -14,21 +14,21 @@ VertexBuffer* VertexBuffer::Create(float* vertices, unsigned int _size)
 
 	if (type == RenderAPIType::Vulkin)
 	{
-		LogError("Vertex Buffer", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogError("Vertex Buffer", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinVertexBuffer(vertices, _size);
 		return new OpenglVertexBuffer(vertices, _size);
 	}
 
 	else if (type == RenderAPIType::DirectX)
 	{
-		LogError("Vertex Buffer", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogError("Vertex Buffer", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXVertexBuffer(vertices, _size);
 		return new OpenglVertexBuffer(vertices, _size);
 	}
 
 	else if (type == RenderAPIType::Metal)
 	{
-		LogError("Vertex Buffer", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogError("Vertex Buffer", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalVertexBuffer(vertices, _size);
 		return new OpenglVertexBuffer(vertices, _size);
 	}

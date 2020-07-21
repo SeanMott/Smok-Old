@@ -14,21 +14,21 @@ GraphicContext* GraphicContext::Create()
 
 	if(type == RenderAPIType::Vulkin)
 	{
-		LogError("Graphic Context", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogError("Graphic Context", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinGraphicContext;
 		return new OpenglGraphicContext;
 	}
 
 	else if(type == RenderAPIType::DirectX)
 	{
-		LogError("Graphic Context", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogError("Graphic Context", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXGraphicContext;
 		return new OpenglGraphicContext;
 	}
 
 	else if(type == RenderAPIType::Metal)
 	{
-		LogError("Graphic Context", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogError("Graphic Context", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalGraphicContext;
 		return new OpenglGraphicContext;
 	}

@@ -16,7 +16,7 @@ bool WindowDisplay::Init(const unsigned int width, const unsigned int height, co
 	{
 		if (!glfwInit())
 		{
-			LogError("Display", "GLFW could not be initalized.");
+			Logger::LogError("Display", "GLFW could not be initalized.");
 			isRunning = false;
 			return false;
 		}
@@ -31,7 +31,7 @@ bool WindowDisplay::Init(const unsigned int width, const unsigned int height, co
 	window = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 	if (!window)
 	{
-		LogError("Display", "Window could not be initalized.");
+		Logger::LogError("Display", "Window could not be initalized.");
 		glfwTerminate();
 		isRunning = false;
 		return false;
@@ -129,7 +129,8 @@ void WindowDisplay::CalDeltaTime()
 void GLFWErrorCallBack(int error, const char* description)
 {
 	//LogError("GLFW: " + to_string(error), (string)description);
-	printf("GLFW Error (%i): %s\n", error, description);
+	Logger::LogError("GLFW (" + to_string(error) + ')', description);
+	//printf("GLFW Error (%i): %s\n", error, description);
 }
 
 //allows the window to resize

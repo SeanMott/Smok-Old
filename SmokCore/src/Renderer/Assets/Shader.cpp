@@ -18,21 +18,21 @@ Shader* Shader::Create(const string& vertexFilePath, const string& fragmentFileP
 
 	if (type == RenderAPIType::Vulkin)
 	{
-		LogError("Shader", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogError("Shader", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinShader(vertexFilePath, fragmentFilePath);
 		return new OpenglShader(vertexFilePath, fragmentFilePath);
 	}
 
 	else if (type == RenderAPIType::DirectX)
 	{
-		LogError("Shader", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogError("Shader", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXShader(vertexFilePath, fragmentFilePath);
 		return new OpenglShader(vertexFilePath, fragmentFilePath);
 	}
 
 	else if (type == RenderAPIType::Metal)
 	{
-		LogError("Shader", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogError("Shader", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalShader(vertexFilePath, fragmentFilePath);
 		return new OpenglShader(vertexFilePath, fragmentFilePath);
 	}
@@ -44,14 +44,14 @@ Shader* Shader::Create(const string& vertexFilePath, const string& fragmentFileP
 //creates a shader || geometry
 Shader* Shader::CreateGeometry(const string& geometryFilePath)
 {
-	LogError("Shader", "Geometry shaders are currently not supported, please check GitHub for updates.");
+	Logger::LogError("Shader", "Geometry shaders are currently not supported, please check GitHub for updates.");
 	return nullptr;
 }
 
 //creates a shader || compute
 Shader* Shader::CreateCompute(const string& computeFilePath)
 {
-	LogError("Shader", "Compute shaders are currently not supported, please check GitHub for updates.");
+	Logger::LogError("Shader", "Compute shaders are currently not supported, please check GitHub for updates.");
 	return nullptr;
 }
 
@@ -62,7 +62,7 @@ string Shader::GetSource(const string& filePath)
 	ifstream readStream(filePath);
 	if (!readStream.is_open())
 	{
-		LogError("Shader", "Failed to open " + filePath + ". Make sure file is there.");
+		Logger::LogError("Shader", "Failed to open " + filePath + ". Make sure file is there.");
 		return "";
 	}
 

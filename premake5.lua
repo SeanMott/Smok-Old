@@ -119,6 +119,8 @@ project "SmokGUI"
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
+        "%{includeDir.Glad}",
+        "%{includeDir.GLFW}",
         "%{includeDir.ImGUI}",
         "SmokCore/src",
         "SmokGUI/src"

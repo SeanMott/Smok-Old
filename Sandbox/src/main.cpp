@@ -57,7 +57,11 @@ public:
 
     void Update(float deltaTime)
     {
-
+        if (Input::GetKey(SMOK_KEY_D))
+        {
+            GUIRenderer::SetFlag(GUIFlags::Docking, !GUIRenderer::GetFlagState(GUIFlags::Docking));
+            GUIRenderer::UpdateImGUIFlags();
+        }
     }
 
     void Draw()
@@ -79,7 +83,7 @@ int main(int args, char* argv[])
     //DisplayI.EnableVSync(true);
     //DisplayI.LockMouse();
 
-    LogMessage("Test Message");
+    Logger::SetLogErrorFlag(true);
 
     //--loads textures and shaders
     Shader* shader = Shader::Create("res\\Shaders\\Vertex.shader", "res\\Shaders\\Fragment.shader");
@@ -109,10 +113,6 @@ int main(int args, char* argv[])
 
     //--link systems and scripts
 
-    GUITest gt;
-    UpdateEvent::AddMethod(&gt, &GUITest::Update);
-    ECSGUIRenderEvent::AddMethod(&gt, &GUITest::Draw);
-
     //link events for the GUI part of the engine
     GUIRenderer::Init();
 
@@ -125,6 +125,11 @@ int main(int args, char* argv[])
     //2DPhysicsCollitions::Init();
     //TileMapRenderer::Init();
     //TimeMapPhysics::Init();
+
+    //link scripts
+    GUITest gt;
+    UpdateEvent::AddMethod(&gt, &GUITest::Update);
+    ECSGUIRenderEvent::AddMethod(&gt, &GUITest::Draw);
 
     //--game loop
     Application::Run();
