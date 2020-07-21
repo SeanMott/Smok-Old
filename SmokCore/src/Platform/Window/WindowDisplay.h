@@ -19,6 +19,7 @@ private:
 
 	bool isRunning = true, isLocked = false;
 	float lastFrame, deltaTime;
+	unsigned int screenWidth, screenHeight;
 
 	//methods
 public:
@@ -31,7 +32,7 @@ public:
 	// Inherited via Display
 	bool Init(unsigned int width, unsigned int height, const std::string& name = "Sandbox") ;
 	void Destroy() ;
-	inline void OnResize(unsigned int width, unsigned int height)  { context->Resize(0, 0, width, height); }
+	void OnResize(unsigned int width, unsigned int height);
 	void Update() ;
 	void LockMouse(bool enable = true) ;
 	void EnableVSync(bool enable = true) ;
@@ -41,6 +42,11 @@ public:
 	inline bool IsRunning()  { return isRunning; }
 	inline bool IsLocked()  { return isLocked; }
 	inline float GetDeltaTime()  { return deltaTime; }
+
+	//gets the screen width
+	inline unsigned GetScreenWidth() { return screenWidth; }
+	//gets the screen height
+	inline unsigned GetScreenHeight() { return screenHeight; }
 };
 
 //-----------------GLFW METHOD CALL BACKS-------------//

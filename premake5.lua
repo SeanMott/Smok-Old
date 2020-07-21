@@ -66,6 +66,11 @@ project "SmokCore"
         "opengl32.lib"
     }
 
+    defines
+    {
+        "GLFW_INCLUDE_NONE"
+    }
+
     filter "system:windows"
         cppdialect "C++17"
         staticruntime "On"
@@ -73,8 +78,7 @@ project "SmokCore"
     
         defines
         {
-            "Window_Build",
-            "GLFW_INCLUDE_NONE"
+            "Window_Build"
         }
     
     filter "configurations:Debug"
@@ -112,7 +116,6 @@ project "SmokGUI"
     
     includedirs
     {
-        "%{includeDir.Glad}",
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
@@ -172,7 +175,6 @@ project "Smok2D"
     
     includedirs
     {
-        "%{includeDir.Glad}",
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
@@ -231,7 +233,6 @@ project "Smok3D"
     
     includedirs
     {
-        "%{includeDir.Glad}",
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
@@ -292,11 +293,11 @@ project "Sandbox"
         "%{includeDir.glm}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
+        "%{includeDir.ImGUI}",
         "SmokCore/src",
         "Smok2D/src",
         "Smok3D/src",
-        "SmokGUI/src",
-        "SmokEditor/src"
+        "SmokGUI/src"
     }
     
     links
@@ -304,7 +305,7 @@ project "Sandbox"
         "SmokCore",
         "Smok2D",
         "Smok3D",
-        --"SmokGUI"
+        "SmokGUI"
     }
 
     filter "system:windows"

@@ -27,12 +27,12 @@ private:
 	//methods
 public:
 
-	inline ~SpriteRenderer() { Shutdown(); }
+	inline ~SpriteRenderer() { Destroy(); }
 
 	//sets the sprite renderer and links it
 	static void Init();
 	//shuts down the sprite renderer
-	static void Shutdown();
+	static void Destroy();
 
 	//renders all the sprites
 	static void Render();

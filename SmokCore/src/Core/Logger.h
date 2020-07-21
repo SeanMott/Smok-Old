@@ -9,7 +9,7 @@
 //logs a error message
 inline void LogError(const std::string& type, const std::string& message)
 {
-#ifndef DISABLE_SMOK_LOGGER
+#ifndef SMOK_DIST
 	std::printf("ERROR, Type: %s || %s\n", type.c_str(), message.c_str());
 #endif
 }
@@ -17,9 +17,11 @@ inline void LogError(const std::string& type, const std::string& message)
 //logs a message
 inline void LogMessage(const std::string& message)
 {
-#ifndef DISABLE_SMOK_LOGGER
+#ifndef SMOK_DIST
 	std::printf("%s\n", message.c_str());
 #endif
 }
 
 #endif
+
+

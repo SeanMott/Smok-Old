@@ -59,7 +59,7 @@ void SpriteRenderer::Init()
 }
 
 //shuts down the sprite renderer
-void SpriteRenderer::Shutdown()
+void SpriteRenderer::Destroy()
 {
 	if(spriteBuffer)
 		spriteBuffer->Destroy();

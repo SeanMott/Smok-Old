@@ -35,9 +35,10 @@ void Application::Run()
 		DisplayI.CalDeltaTime();
 
 #ifndef SMOK_DIST
-		if (Input::GetKey(Smok_KEY_ESCAPE))
+		if (Input::GetKey(SMOK_KEY_ESCAPE))
 			break;
 #endif
+		DisplayI.GetContext()->Clear(); //clears the screen
 
 		//update
 		UpdateEvent::Call(DisplayI.GetDeltaTime());
@@ -45,11 +46,9 @@ void Application::Run()
 		//fixed update
 		FixedUpdateEvent::Call(FIXED_UPDATE_RATE);
 
-		DisplayI.GetContext()->Clear(); //clears the screen
-
 		//trigger systems
 		ECSSystemEvent::Call(); //handles all systems except GUI based ones.
-		//ECSGUISystemEvent::Call(); //allows GUI to be rendered and triggered over the scene.
+		ECSGUIRenderEvent::Call(); //allows GUI to be rendered and triggered over the scene.
 
 		DisplayI.Update(); //swaps render buffers
 	}

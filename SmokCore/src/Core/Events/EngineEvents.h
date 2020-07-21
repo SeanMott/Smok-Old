@@ -18,21 +18,64 @@ private:
 public:
 
 	//adds a method || pass as a pointer
-	template</*typename ClassInstance, */typename MethodName>
-	static inline void AddMethod(/*ClassInstance classInstance,*/ MethodName methodName)
+	template<typename ClassInstance, typename MethodName>
+	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
 	{
-		system.bind(methodName);
-		//system.bind(classInstance, methodName);
+		system.bind(classInstance, methodName);
 		methods.emplace_back(system.GetMemento());
 	}
 
-	/*adds a method || pass as a pointer
+	//adds a method || pass as a pointer
 	template<typename MethodName>
 	static inline void AddMethod(MethodName methodName)
 	{
 		system.bind(methodName);
 		methods.emplace_back(system.GetMemento());
-	}*/
+	}
+
+	//removes a method
+
+	//calls all methods
+	static inline void Call()
+	{
+		if (methods.size() > 0)
+		{
+			for (unsigned int i = 0; i < methods.size(); i++)
+			{
+				system.SetMemento(methods[i]);
+				system();
+			}
+		}
+	}
+};
+
+//triggers GUI Render methods
+class ECSGUIRenderEvent
+{
+	//vars
+private:
+	static std::vector<fastdelegate::DelegateMemento> methods;
+	static fastdelegate::FastDelegate0<void> system;
+
+	//methods
+public:
+
+	//adds a method || pass as a pointer
+	template<typename ClassInstance, typename MethodName>
+	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
+	{
+		//system.bind(methodName);
+		system.bind(classInstance, methodName);
+		methods.emplace_back(system.GetMemento());
+	}
+
+	//adds a method || pass as a pointer
+	template<typename MethodName>
+	static inline void AddMethod(MethodName methodName)
+	{
+		system.bind(methodName);
+		methods.emplace_back(system.GetMemento());
+	}
 
 	//removes a method
 

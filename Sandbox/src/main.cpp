@@ -8,6 +8,7 @@
 #include <Renderer\VertexBuffer.h>
 
 #include <Core\Input.h>
+#include <Core\Logger.h>
 #include <Core\Events\InputEvents.h>
 #include <Core\Events\EngineEvents.h>
 
@@ -23,6 +24,10 @@
 #include <Smok2D\Systems\SpriteRenderer.h>
 #include <Smok2D\Components\OrthographicCamera.h>
 #include <Smok2D\Components\Sprite.h>
+
+//Smok GUI includes
+#include <SmokGUI\Core\GUIRenderer.h>
+#include <imgui.h>
 
 //other
 //#include <glad/glad.h>
@@ -45,6 +50,27 @@ using namespace std; using namespace glm;
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
+class GUITest
+{
+
+public:
+
+    void Update(float deltaTime)
+    {
+
+    }
+
+    void Draw()
+    {
+        static bool show = true;
+
+        GUIRenderer::Begin();
+        ImGui::ShowDemoWindow(&show);
+        GUIRenderer::End();
+    }
+
+ };
+
 int main(int args, char* argv[])
 {
     //--set up application
@@ -52,6 +78,8 @@ int main(int args, char* argv[])
 
     //DisplayI.EnableVSync(true);
     //DisplayI.LockMouse();
+
+    LogMessage("Test Message");
 
     //--loads textures and shaders
     Shader* shader = Shader::Create("res\\Shaders\\Vertex.shader", "res\\Shaders\\Fragment.shader");
@@ -80,9 +108,13 @@ int main(int args, char* argv[])
     EntityManager::AddComponet<Sprite>("Face3", container, (unsigned int)0, shader);
 
     //--link systems and scripts
-    
+
+    GUITest gt;
+    UpdateEvent::AddMethod(&gt, &GUITest::Update);
+    ECSGUIRenderEvent::AddMethod(&gt, &GUITest::Draw);
+
     //link events for the GUI part of the engine
-    //GUIRenderer::Init();
+    GUIRenderer::Init();
 
     //link events for the 3D part of the engine
     //MeshRenderer::Init();
@@ -100,7 +132,8 @@ int main(int args, char* argv[])
     //--clean up data
     
     //systems
-    SpriteRenderer::Shutdown();
+    SpriteRenderer::Destroy();
+    GUIRenderer::Destroy();
 
     //entities
     EntityManager::DestroyAllEntities();

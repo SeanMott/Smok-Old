@@ -89,6 +89,13 @@ void WindowDisplay::Update()
 	glfwPollEvents();
 }
 
+//resizes the window
+void WindowDisplay::OnResize(unsigned int width, unsigned int height)
+{
+	screenWidth = width; screenHeight = height;
+	context->Resize(0, 0, width, height);
+}
+
 //enables V-Sync
 void WindowDisplay::EnableVSync(bool enable)
 {
