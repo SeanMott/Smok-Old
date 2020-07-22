@@ -43,6 +43,9 @@ public:
 	inline bool IsLocked()  { return isLocked; }
 	inline float GetDeltaTime()  { return deltaTime; }
 
+	//shutdown the window
+	void Shutdown();
+
 	//gets the screen width
 	inline unsigned GetScreenWidth() { return screenWidth; }
 	//gets the screen height

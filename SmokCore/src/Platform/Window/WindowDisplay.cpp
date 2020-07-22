@@ -83,6 +83,13 @@ void WindowDisplay::Destroy()
 	glfwTerminate();
 }
 
+//shutdown the window
+void WindowDisplay::Shutdown()
+{
+	glfwSetWindowShouldClose(window, true);
+	isRunning = false;
+}
+
 //updates the window || swaps the render buffers and polls for input
 void WindowDisplay::Update()
 {

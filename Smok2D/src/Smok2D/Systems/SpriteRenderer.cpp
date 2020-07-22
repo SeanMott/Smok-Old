@@ -146,10 +146,14 @@ void SpriteRenderer::Render()
 		{
 			lastTextureName = sprite.texture;
 			lastTexture = AssetManager::GetTexture(lastTextureName);
-			if (lastTexture)
-				lastTexture->Bind(sprite.textureSlot);
-			else
-				lastTexture->UnBind();
+			
+			if (lastTexture == nullptr)
+			{
+				Logger::LogMessage("Not all entites with a active Sprite component has a texture assigned.");
+				continue;
+			}
+
+			lastTexture->Bind(sprite.textureSlot);
 		}
 
 		//cal transform

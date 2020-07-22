@@ -39,16 +39,17 @@ public:
 	virtual void Unbind() = 0;
 
 	//recreates the frame buffer
-	virtual void Recreate(unsigned int colorBufferCount, unsigned int depthBufferCount, unsigned int stencilBufferCount) = 0;
-	//recreates the frame buffer
-	virtual void Recreate() = 0;
+	virtual void Recreate(unsigned int colorBufferCount = 0, unsigned int depthBufferCount = 0, unsigned int stencilBufferCount = 0) = 0;
+
+	//resizes the frame buffer
+	virtual void Resize(unsigned int width, unsigned int height) = 0;
 
 	//adds a color buffer
-	virtual void CreateColorBuffer(unsigned int count = 1) = 0;
+	virtual void CreateColorBuffer(unsigned int count = 0) = 0;
 	//adds a depth buffer
-	virtual void CreateDepthBuffer(unsigned int count = 1) = 0;
+	virtual void CreateDepthBuffer(unsigned int count = 0) = 0;
 	//adds a stencil buffer
-	virtual void CreateStencilBuffer(unsigned int count = 1) = 0;
+	virtual void CreateStencilBuffer(unsigned int count = 0) = 0;
 
 	//destroys a color buffer || starts at the 0 element
 	virtual void DestroyColorBuffer(unsigned int count = 1) = 0;

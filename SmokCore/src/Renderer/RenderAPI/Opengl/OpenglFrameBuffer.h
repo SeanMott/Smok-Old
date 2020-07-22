@@ -27,14 +27,15 @@ public:
 	void Bind() override;
 	void Unbind() override;
 	//recreates the frame buffer
-	void Recreate(unsigned int colorBufferCount, unsigned int depthBufferCount, unsigned int stencilBufferCount) override;
-	//recreates the frame buffer
-	void Recreate() override;
+	void Recreate(unsigned int colorBufferCount = 0, unsigned int depthBufferCount = 0, unsigned int stencilBufferCount = 0) override;
+
+	//resizes the frame buffer
+	void Resize(unsigned int width, unsigned int height) override;
 
 	// Inherited via FrameBuffer
-	void CreateColorBuffer(unsigned int count = 1) override;
-	void CreateDepthBuffer(unsigned int count = 1) override;
-	void CreateStencilBuffer(unsigned int count = 1) override;
+	void CreateColorBuffer(unsigned int count = 0) override;
+	void CreateDepthBuffer(unsigned int count = 0) override;
+	void CreateStencilBuffer(unsigned int count = 0) override;
 	unsigned int GetColorBufferId() const override;
 	unsigned int GetDepthBufferId() const override;
 	unsigned int GetStencilBufferId() const override;

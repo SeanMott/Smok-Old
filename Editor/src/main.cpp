@@ -52,20 +52,121 @@ using namespace std; using namespace glm;
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
-static FrameBuffer* fb = nullptr;
-
 class Editor
 {
+    //vars
+private:
+
+    vec2 viewportSize;
+
     //methods
 public:
 
-    static void Draw()
+    void Draw()
     {
-        ImGui::Begin("Scene View");
-        ImGui::Image((void*)Application::fb->GetColorBufferId(), ImVec2(DisplayI.GetScreenWidth(), DisplayI.GetScreenHeight()));
-        //ImGui::Image((void*)AssetManager::GetTexture("Face")->GetID(), ImVec2(256.0f, 256.0f));
+        //top menu
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                //opens a scene
+                if (ImGui::MenuItem("Open Scene")) Logger::LogMessageAlways("Opening a scene through the editor is currently not supported, check GitHub for updates.");
 
-        ImGui::End();
+                //saves a scene
+                if (ImGui::MenuItem("Save Scene")) Logger::LogMessageAlways("Saving a scene through the editor is currently not supported, check GitHub for updates.");
+
+                //saves a project
+                if (ImGui::MenuItem("Save Project")) Logger::LogMessageAlways("Saving a project through the editor is currently not supported, check GitHub for updates.");
+
+                //opens a project
+                if (ImGui::MenuItem("Open Project")) Logger::LogMessageAlways("Opening a project through the editor is currently not supported, check GitHub for updates.");
+
+                //shows build settings
+                if (ImGui::MenuItem("Build Settings")) Logger::LogMessageAlways("Showing build settings through the editor is currently not supported, check GitHub for updates.");
+
+                //builds the game
+                if (ImGui::MenuItem("Build")) Logger::LogMessageAlways("Building through the editor is currently not supported, check GitHub for updates.");
+
+                //exits the app
+                if (ImGui::MenuItem("Exit")) DisplayI.Shutdown();
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Edit"))
+            {
+                //makes a entity
+                if (ImGui::MenuItem("Entity")) Logger::LogMessageAlways("Making a Entity through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a script
+                if (ImGui::MenuItem("Script")) Logger::LogMessageAlways("Making a Script through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a system
+                if (ImGui::MenuItem("System")) Logger::LogMessageAlways("Making a System through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a component
+                if (ImGui::MenuItem("Component")) Logger::LogMessageAlways("Making a Component through the editor is currently not supported, check GitHub for updates.");
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Windows"))
+            {
+                //makes a inspecter
+                if (ImGui::MenuItem("Inspecter")) Logger::LogMessageAlways("Making a Inspecter window through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a entity hierarchy
+                if (ImGui::MenuItem("Entity Hierarchy")) Logger::LogMessageAlways("Making a Entity Hierarchy window through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a scene view
+                if (ImGui::MenuItem("Scene View")) Logger::LogMessageAlways("Making a Scene View window through the editor is currently not supported, check GitHub for updates.");
+
+                //makes a asset hot bar
+                if (ImGui::MenuItem("Asset Bar")) Logger::LogMessageAlways("Making a Asset Bar window through the editor is currently not supported, check GitHub for updates.");
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Help"))
+            {
+                //brings up the docs
+                if (ImGui::MenuItem("Docs")) Logger::LogMessageAlways("Opening docs through the editor is currently not supported, check GitHub for updates.");
+
+                //opens the Github
+                if (ImGui::MenuItem("Github")) Logger::LogMessageAlways("Opening Github through the editor is currently not supported, check GitHub for updates.");
+
+                //credits
+                if (ImGui::MenuItem("Credits")) Logger::LogMessageAlways("Opening credits through the editor is currently not supported, check GitHub for updates.");
+
+                //libraries
+                if (ImGui::MenuItem("Libraries")) Logger::LogMessageAlways("Opening the library list through the editor is currently not supported, check GitHub for updates.");
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenuBar();
+        }
+
+            //entity hierarchy
+
+            //inspecter
+
+            //scene view
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+            ImGui::Begin("Scene Viewport");
+            ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
+
+            if (viewportSize != *((vec2*)&viewPortSize))
+            {
+                viewportSize = *((vec2*)&viewPortSize);
+                Application::fb->Resize((unsigned int)viewportSize.x, (unsigned int)viewportSize.y);
+            }
+
+            ImGui::Image((void*)Application::fb->GetColorBufferId(), viewPortSize, ImVec2(0, 1), ImVec2(1, 0));
+            ImGui::End();
+            ImGui::PopStyleVar();
+
+            //asset bar
     }
 };
 
@@ -85,12 +186,12 @@ int main(int args, char* argv[])
     AssetManager::LoadTexture("Con", "res\\Textures\\container.jpg");
 
     FrameBufferData data;
-    data.width = DisplayI.GetScreenWidth();
-    data.height = DisplayI.GetScreenHeight();
+    data.width = 400;
+    data.height = 200;
+    data.colorBufferIds.resize(1);
+    data.depthBufferIds.resize(1);
     FrameBuffer* sceneFrameBuffer = FrameBuffer::Create(data);
-    sceneFrameBuffer->CreateColorBuffer();
-    sceneFrameBuffer->CreateDepthBuffer();
-    sceneFrameBuffer->Bind();
+    //sceneFrameBuffer->Bind();
     Application::fb = sceneFrameBuffer; //fb = sceneFrameBuffer;
 
     //--load entities
@@ -111,11 +212,13 @@ int main(int args, char* argv[])
     EntityManager::AddComponet<Transform>("Face3", vec3(550.0f, 100.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
     EntityManager::AddComponet<Sprite>("Face3", "Con", (unsigned int)0, "Shader");
 
+    Editor editor;
 
     //--link systems and scripts
 
-    ECSGUIRenderEvent::AddMethod(&Editor::Draw);
-    //GUIRenderer::Init();
+    ECSGUIRenderEvent::AddMethod(&editor, &Editor::Draw);
+
+
     SpriteRenderer::Init();
 
     //--game loop
@@ -130,6 +233,7 @@ int main(int args, char* argv[])
     EntityManager::DestroyAllEntities();
 
     //assets
+    Application::fb->Destroy();
     AssetManager::DestroyAllAssets();
 
     Application::Destroy();

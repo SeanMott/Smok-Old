@@ -58,6 +58,9 @@ void Application::Run()
 
 		ECSGUIRenderEvent::Call(); //allows GUI to be rendered and triggered over the scene.
 
+		if (!DisplayI.IsRunning())
+			break;
+
 		DisplayI.Update(); //swaps render buffers
 	}
 }

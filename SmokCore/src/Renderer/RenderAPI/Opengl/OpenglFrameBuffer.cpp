@@ -23,8 +23,8 @@ void OpenglFrameBuffer::Destroy()
 
 void OpenglFrameBuffer::Bind()
 {
-	//glBindFramebuffer(GL_FRAMEBUFFER, id);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, id);
+	glBindFramebuffer(GL_FRAMEBUFFER, id);
+	//glViewport(0, 0, data.width, data.height);
 }
 
 void OpenglFrameBuffer::Unbind()
@@ -34,45 +34,27 @@ void OpenglFrameBuffer::Unbind()
 
 void OpenglFrameBuffer::Recreate(unsigned int colorBufferCount, unsigned int depthBufferCount, unsigned int stencilBufferCount)
 {
-	DestroyAllColorBuffers();
-	DestroyAllDepthBuffers();
 	DestroyAllStencilBuffers();
+	DestroyAllDepthBuffers();
+	DestroyAllColorBuffers();
 
+	//if(id == 0)
 	glGenFramebuffers(1, &id);
 	glBindFramebuffer(GL_FRAMEBUFFER, id);
-	
-	if (colorBufferCount == 0 && depthBufferCount == 0 && stencilBufferCount == 0)
-	{
-		CreateColorBuffer();
-		CreateDepthBuffer();
-		CreateStencilBuffer();
-	}
 
-	else
-	{
-		CreateColorBuffer(colorBufferCount);
-		CreateDepthBuffer(depthBufferCount);
-		CreateStencilBuffer(stencilBufferCount);
-	}
+	CreateColorBuffer(colorBufferCount);
+	CreateDepthBuffer(depthBufferCount);
+	CreateStencilBuffer(stencilBufferCount);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		Logger::LogError("Frame Buffer Opengl", "Frame Buffer is incomplete");
 }
 
-void OpenglFrameBuffer::Recreate()
+//resizes the frame buffer
+void OpenglFrameBuffer::Resize(unsigned int width, unsigned int height)
 {
-	DestroyAllColorBuffers();
-	DestroyAllDepthBuffers();
-	DestroyAllStencilBuffers();
-
-	glGenFramebuffers(1, &id);
-	glBindFramebuffer(GL_FRAMEBUFFER, id);
-	CreateColorBuffer();
-	CreateDepthBuffer();
-	CreateStencilBuffer();
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		Logger::LogError("Frame Buffer Opengl", "Frame Buffer is incomplete");
+	data.width = width; data.height = height;
+	Recreate(data.colorBufferIds.size(), data.depthBufferIds.size(), data.stencilBufferIds.size());
 }
 
 void OpenglFrameBuffer::CreateColorBuffer(unsigned int count)
@@ -107,7 +89,7 @@ void OpenglFrameBuffer::CreateDepthBuffer(unsigned int count)
 
 		glGenTextures(1, &data.depthBufferIds[pos]);
 		glBindTexture(GL_TEXTURE_2D, data.depthBufferIds[pos]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, data.width, data.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, data.width, data.height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -125,26 +107,69 @@ void OpenglFrameBuffer::DestroyColorBuffer(unsigned int count)
 {
 	if (count == 0)
 		return;
+
+	for (unsigned int i = 0; i < count; i++)
+	{
+		glDeleteTextures(1, &data.colorBufferIds[i]);
+	}
+
+	vector<unsigned int>::iterator it;
+	it = data.colorBufferIds.begin() + count;
+	data.colorBufferIds.erase(data.colorBufferIds.begin(), it);
 }
 
 void OpenglFrameBuffer::DestroyDepthBuffer(unsigned int count)
 {
+	for (unsigned int i = 0; i < count; i++)
+	{
+		glDeleteTextures(1, &data.depthBufferIds[i]);
+	}
+
+	vector<unsigned int>::iterator it;
+	it = data.depthBufferIds.begin() + count;
+	data.depthBufferIds.erase(data.depthBufferIds.begin(), it);
 }
 
 void OpenglFrameBuffer::DestroyStencilBuffer(unsigned int count)
 {
+	for (unsigned int i = 0; i < count; i++)
+	{
+		glDeleteTextures(1, &data.stencilBufferIds[i]);
+	}
+
+	vector<unsigned int>::iterator it;
+	it = data.stencilBufferIds.begin() + count;
+	data.stencilBufferIds.erase(data.stencilBufferIds.begin(), it);
 }
 
 void OpenglFrameBuffer::DestroyAllColorBuffers()
 {
+	for (unsigned int i = 0; i < data.colorBufferIds.size(); i++)
+	{
+		glDeleteTextures(1, &data.colorBufferIds[i]);
+	}
+
+	data.colorBufferIds.clear();
 }
 
 void OpenglFrameBuffer::DestroyAllDepthBuffers()
 {
+	for (unsigned int i = 0; i < data.depthBufferIds.size(); i++)
+	{
+		glDeleteTextures(1, &data.depthBufferIds[i]);
+	}
+
+	data.depthBufferIds.clear();
 }
 
 void OpenglFrameBuffer::DestroyAllStencilBuffers()
 {
+	for (unsigned int i = 0; i < data.stencilBufferIds.size(); i++)
+	{
+		glDeleteTextures(1, &data.stencilBufferIds[i]);
+	}
+
+	data.stencilBufferIds.clear();
 }
 
 unsigned int OpenglFrameBuffer::GetColorBufferId() const
@@ -173,7 +198,7 @@ unsigned int OpenglFrameBuffer::GetStencilBufferId() const
 {
 	if (data.stencilBufferIds.size() < 1)
 	{
-		Logger::LogError("Frame Buffer Opengl", "No Depth Buffers are attachted");
+		Logger::LogError("Frame Buffer Opengl", "No Stencil Buffers are attachted");
 		return (unsigned int)0;
 	}
 

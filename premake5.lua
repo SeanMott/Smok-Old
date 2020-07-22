@@ -1,5 +1,7 @@
 workspace "Smok"
+    --architecture "x86_64"
     architecture "x86"
+    startproject "Editor"
 
     configurations
     {
