@@ -4,6 +4,7 @@
 #define Application_h
 
 #include <string>
+#include <Renderer\FrameBuffer.h>
 
 class Application
 {
@@ -13,6 +14,8 @@ private:
 
 	//methods
 public:
+
+	static FrameBuffer* fb;
 
 	//inits the application
 	static void Init(const unsigned int width, const int height, const std::string& name = "Smok");

@@ -62,7 +62,8 @@ bool WindowDisplay::Init(const unsigned int width, const unsigned int height, co
 
 	//render setings
 	context->EnableBlending();
-	context->EnableZBuffer();
+	//context->EnableFaceCulling();
+	//context->EnableZBuffer();
 	EnableVSync();
 
 	//link to window events

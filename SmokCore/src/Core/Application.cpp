@@ -8,6 +8,8 @@
 
 const float Application::FIXED_UPDATE_RATE = 60.0f;
 
+FrameBuffer* Application::fb = nullptr;
+
 //inits the application
 void Application::Init(const unsigned int width, const int height, const std::string& name)
 {
@@ -42,12 +44,18 @@ void Application::Run()
 
 		//update
 		UpdateEvent::Call(DisplayI.GetDeltaTime());
-		
+
 		//fixed update
 		FixedUpdateEvent::Call(FIXED_UPDATE_RATE);
 
 		//trigger systems
+		fb->Bind();
 		ECSSystemEvent::Call(); //handles all systems except GUI based ones.
+		fb->Unbind();
+
+		DisplayI.GetContext()->Clear();
+		DisplayI.GetContext()->IndexBufferDrawCall(0, 6);
+
 		ECSGUIRenderEvent::Call(); //allows GUI to be rendered and triggered over the scene.
 
 		DisplayI.Update(); //swaps render buffers

@@ -12,19 +12,20 @@
 //#include <Core\Events\InputEvents.h>
 #include <Core\Events\EngineEvents.h>
 #include <Core\AssetManager.h>
+#include <Renderer\FrameBuffer.h>
 
 #include <Core\ECS\EntityManager.h>
-//#include <Core\ECS\Components\Transform.h>
+#include <Core\ECS\Components\Transform.h>
 //#include <Core\ECS\Components\Camera.h>
 
 //Smok 3D includes
 //#include <Smok3D\Components\Mesh.h>
 //#include <Smok3D\Systems\MeshRenderer.h>
 
-/*Smok 2D includes
+//Smok 2D includes
 #include <Smok2D\Systems\SpriteRenderer.h>
 #include <Smok2D\Components\OrthographicCamera.h>
-#include <Smok2D\Components\Sprite.h>*/
+#include <Smok2D\Components\Sprite.h>
 
 //Smok GUI includes
 #include <SmokGUI\Core\GUIRenderer.h>
@@ -51,6 +52,8 @@ using namespace std; using namespace glm;
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
+static FrameBuffer* fb = nullptr;
+
 class Editor
 {
     //methods
@@ -58,36 +61,11 @@ public:
 
     static void Draw()
     {
+        ImGui::Begin("Scene View");
+        ImGui::Image((void*)Application::fb->GetColorBufferId(), ImVec2(DisplayI.GetScreenWidth(), DisplayI.GetScreenHeight()));
+        //ImGui::Image((void*)AssetManager::GetTexture("Face")->GetID(), ImVec2(256.0f, 256.0f));
 
-        //GUIRenderer::Begin();
-
-        ImGui::Begin("Test 1");
-        ImGui::Text("Hello Dockspace");  //GUIRenderer::DockSpace(&show);
         ImGui::End();
-
-        ImGui::Begin("Test 2");
-        ImGui::Text("Other text");  //GUIRenderer::DockSpace(&show);
-        ImGui::Image((void*)AssetManager::GetTexture("Con")->GetID(), ImVec2(256.0f, 256.0f));
-        ImGui::End();
-
-        //GUIRenderer::End();
-    }
-
-    static void DrawTwo()
-    {
-
-        //GUIRenderer::Begin();
-
-        ImGui::Begin("Test 3");
-        ImGui::Text("Kill");  //GUIRenderer::DockSpace(&show);
-        ImGui::End();
-
-        ImGui::Begin("Test 4");
-        ImGui::Text("Happy little face");  //GUIRenderer::DockSpace(&show);
-        ImGui::Image((void*)AssetManager::GetTexture("Face")->GetID(), ImVec2(256.0f, 256.0f));
-        ImGui::End();
-
-        //GUIRenderer::End();
     }
 };
 
@@ -105,14 +83,40 @@ int main(int args, char* argv[])
     AssetManager::LoadShader("Shader", "res\\Shaders\\Vertex.shader", "res\\Shaders\\Fragment.shader");
     AssetManager::LoadTexture("Face", "res\\Textures\\awesomeface.png");
     AssetManager::LoadTexture("Con", "res\\Textures\\container.jpg");
-    AssetManager::LoadTexture("S", "C:\\Users\\skyst\\Desktop\\Sprite Editor Unity.png");
+
+    FrameBufferData data;
+    data.width = DisplayI.GetScreenWidth();
+    data.height = DisplayI.GetScreenHeight();
+    FrameBuffer* sceneFrameBuffer = FrameBuffer::Create(data);
+    sceneFrameBuffer->CreateColorBuffer();
+    sceneFrameBuffer->CreateDepthBuffer();
+    sceneFrameBuffer->Bind();
+    Application::fb = sceneFrameBuffer; //fb = sceneFrameBuffer;
 
     //--load entities
+    EntityManager::Create("Camera");
+    EntityManager::AddComponet<OrthographicCamera>("Camera", (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+    EntityManager::AddComponet<Transform>("Camera", vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+    //create entites with sprites
+    EntityManager::Create("Face1");
+    EntityManager::AddComponet<Transform>("Face1", vec3(150.0f, 170.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+    EntityManager::AddComponet<Sprite>("Face1", "Con", (unsigned int)0, "Shader");
+
+    EntityManager::Create("Face2");
+    EntityManager::AddComponet<Transform>("Face2", vec3(50.0f, 200.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+    EntityManager::AddComponet<Sprite>("Face2", "Face", (unsigned int)1, "Shader");
+
+    EntityManager::Create("Face3");
+    EntityManager::AddComponet<Transform>("Face3", vec3(550.0f, 100.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+    EntityManager::AddComponet<Sprite>("Face3", "Con", (unsigned int)0, "Shader");
+
 
     //--link systems and scripts
 
     ECSGUIRenderEvent::AddMethod(&Editor::Draw);
-    ECSGUIRenderEvent::AddMethod(&Editor::DrawTwo);
+    //GUIRenderer::Init();
+    SpriteRenderer::Init();
 
     //--game loop
     Application::Run();
