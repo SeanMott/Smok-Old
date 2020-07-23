@@ -15,7 +15,7 @@ private:
 	//methods
 public:
 
-	static FrameBuffer* fb;
+	static FrameBuffer* customeFrameBuffer;
 
 	//inits the application
 	static void Init(const unsigned int width, const int height, const std::string& name = "Smok");

@@ -12,7 +12,24 @@ Entity* EntityManager::Create(const char* name)
 {
 	if (IsEntity(name))
 	{
-		printf("%s is already a name of a entity\n", name);
+		Logger::LogError("Entity", (string)name + " is already a name of a entity.");
+		//printf("%s is already a name of a entity\n", name);
+		//entity e;
+		return nullptr;
+	}
+
+	entity e = entityRegistry.create();
+	entities.emplace_back(name, e);
+	return &entities[entities.size() - 1];
+}
+
+//create entity
+Entity* EntityManager::Create(const string& name)
+{
+	if (IsEntity(name))
+	{
+		Logger::LogError("Entity", name + " is already a name of a entity.");
+		//printf("%s is already a name of a entity\n", name);
 		//entity e;
 		return nullptr;
 	}
@@ -36,7 +53,8 @@ void EntityManager::Destroy(std::string& name)
 		}
 	}
 
-	printf("%s is not a entity\n", name.c_str());
+	Logger::LogError("Entity", name + " is not a entity.");
+	//printf("%s is not a entity\n", name.c_str());
 }
 
 //gets a entity
@@ -48,7 +66,8 @@ Entity* EntityManager::GetEntity(const string& name)
 			return &entities[i];
 	}
 
-	printf("%s is not a entity\n", name.c_str());
+	//printf("%s is not a entity\n", name.c_str());
+	Logger::LogError("Entity", name + " is not a entity.");
 	return nullptr;
 }
 
@@ -77,7 +96,8 @@ void EntityManager::AddLayer(const string& name)
 {
 	if (IsLayer(name))
 	{
-		printf("%s is already a layer name.\n", name.c_str());
+		//printf("%s is already a layer name.\n", name.c_str());
+		Logger::LogError("Layer", name + " is already a layer.");
 		return;
 	}
 
@@ -89,7 +109,8 @@ void EntityManager::RemoveLayer(const string& name)
 {
 	if (!IsLayer(name))
 	{
-		printf("%s is not a layer name.\n", name.c_str());
+		//printf("%s is not a layer name.\n", name.c_str());
+		Logger::LogError("Layer", name + " is not a layer.");
 		return;
 	}
 

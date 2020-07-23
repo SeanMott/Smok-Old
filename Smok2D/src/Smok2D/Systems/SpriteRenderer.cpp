@@ -77,6 +77,7 @@ void SpriteRenderer::Render()
 	mat4 model = mat4(1.0f);
 	mat4 projection = mat4(1.0f);
 	mat4 view = mat4(1.0f);
+	mat4 projectionView = mat4(1.0f);
 
 	if (hasSentWarning)
 		return;
@@ -113,10 +114,15 @@ void SpriteRenderer::Render()
 		if (!camera.isActive)
 			continue;
 
-		//auto& trans = c.get<Transform>(cam);
+		auto& trans = c.get<Transform>(cam);
 
 		projection = ortho(0.0f, camera.viewLength, camera.viewHeight, 0.0f, -1.0f, 1.0f);
-		//cal view for cam position
+		
+		mat4 transform = translate(mat4(1.0f), trans.position) * 
+			rotate(mat4(1.0f), trans.rotation.x, vec3(0.0f, 0.0f, 1.0f));
+
+		view = inverse(transform);
+		projectionView = projection * view;
 	}
 
 	//render entities
@@ -164,7 +170,7 @@ void SpriteRenderer::Render()
 
 		lastShader->SetInt("Sprite", sprite.textureSlot);
 		//lastShader->SetVector3("Color", sprite.color);
-		lastShader->SetMatrix4("PVM", projection * /*View * */ model);
+		lastShader->SetMatrix4("PVM", projectionView * model); 
 
 		//draw call
 		context->IndexBufferDrawCall(0, spriteIndexBuffer->GetCount());

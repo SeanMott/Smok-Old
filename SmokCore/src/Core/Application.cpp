@@ -6,9 +6,11 @@
 #include <Core\ECS\EntityManager.h>
 #include <Core\Input.h>
 
+//#include <future>
+
 const float Application::FIXED_UPDATE_RATE = 60.0f;
 
-FrameBuffer* Application::fb = nullptr;
+FrameBuffer* Application::customeFrameBuffer = nullptr;
 
 //inits the application
 void Application::Init(const unsigned int width, const int height, const std::string& name)
@@ -40,27 +42,43 @@ void Application::Run()
 		if (Input::GetKey(SMOK_KEY_ESCAPE))
 			break;
 #endif
+		
+		if (customeFrameBuffer)
+			customeFrameBuffer->Bind();
+
 		DisplayI.GetContext()->Clear(); //clears the screen
 
 		//update
-		UpdateEvent::Call(DisplayI.GetDeltaTime());
+		UpdateEvent::Call(DisplayI.GetDeltaTime() * 2);
 
 		//fixed update
 		FixedUpdateEvent::Call(FIXED_UPDATE_RATE);
 
 		//trigger systems
-		fb->Bind();
 		ECSSystemEvent::Call(); //handles all systems except GUI based ones.
-		fb->Unbind();
 
-		DisplayI.GetContext()->Clear();
-		DisplayI.GetContext()->IndexBufferDrawCall(0, 6);
+		if (customeFrameBuffer)
+			customeFrameBuffer->Unbind();
+
+		//DisplayI.GetContext()->Clear();
+
+		/*
+		ECSRenderEvent::Call()
+
+		Call() will also handle the frame buffers by assine them to the swap chain
+
+		*/
 
 		ECSGUIRenderEvent::Call(); //allows GUI to be rendered and triggered over the scene.
+
+		//DisplayI.GetContext()->IndexBufferDrawCall(0, 6);
+		//DisplayI.GetContext()->Clear();
 
 		if (!DisplayI.IsRunning())
 			break;
 
 		DisplayI.Update(); //swaps render buffers
+
+		//DisplayI.GetContext()->Clear();
 	}
 }

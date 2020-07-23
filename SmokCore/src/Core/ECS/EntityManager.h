@@ -46,12 +46,16 @@ public:
 
 	//create entity
 	static Entity* Create(const char* name);
+	//create entity
+	static Entity* Create(const std::string& name);
 	//destroy entity
 	static void Destroy(std::string& name);
 	//gets a entity
 	static Entity* GetEntity(const std::string& name);
 	//destroys all entities
 	static void DestroyAllEntities();
+	//gets all the entities
+	static inline std::vector<Entity>& GetAllEntities() { return entities; }
 
 	//adds a component
 	template<typename Comp, typename... Args>
