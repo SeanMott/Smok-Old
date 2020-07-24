@@ -19,6 +19,7 @@ includeDir["stb"] = "Library/stb"
 includeDir["glm"] = "Library/glm"
 includeDir["FastDelegate"] = "Library/FastDelegate"
 includeDir["entt"] = "Library/entt/src"
+includeDir["meta"] = "Library/meta/src"
 includeDir["ImGUI"] = "Library/imgui"
 
 --includes the premake files
@@ -55,6 +56,7 @@ project "SmokCore"
         "%{includeDir.stb}",
         "%{includeDir.FastDelegate}",
         "%{includeDir.entt}",
+        "%{includeDir.meta}",
         "SmokCore/src"
     }
     
@@ -257,69 +259,6 @@ project "Smok3D"
         {
             "Window_Build",
             "GLFW_INCLUDE_NONE"
-        }
-    
-    filter "configurations:Debug"
-        defines "SMOK_DEBUG"
-        symbols "On"
-    
-    filter "configurations:Release"
-        defines "SMOK_RELEASE"
-        optimize "On"
-    
-    filter "configurations:Dist"
-        defines "SMOK_DIST"
-        optimize "On"
-
-project "Editor"
-    location "Editor"
-    kind "ConsoleApp"
-    language "C++"
-
-    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("bin-obj/" .. outputdir .. "/%{prj.name}")
-
-    --pchheader "smpch.h"
-    --pchsource "%{prj.name}/src/smpch.cpp"
-
-    files 
-    {
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.hpp",
-        "%{prj.name}/src/**.c",
-        "%{prj.name}/src/**.cpp"
-    }
-    
-    includedirs
-    {
-        "%{includeDir.Glad}",
-        "%{includeDir.glm}",
-        "%{includeDir.FastDelegate}",
-        "%{includeDir.entt}",
-        "%{includeDir.ImGUI}",
-        "SmokCore/src",
-        "Smok2D/src",
-        "Smok3D/src",
-        "SmokGUI/src"
-    }
-    
-    links
-    {
-        "SmokCore",
-        "Smok2D",
-        "Smok3D",
-        "SmokGUI"
-    }
-
-    filter "system:windows"
-        cppdialect "C++17"
-        staticruntime "On"
-        systemversion "latest"
-    
-        defines
-        {
-            "Window_Build"
-            --"GLFW_INCLUDE_NONE"
         }
     
     filter "configurations:Debug"
