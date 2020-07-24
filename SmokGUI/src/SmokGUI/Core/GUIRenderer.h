@@ -38,17 +38,13 @@ public:
 
 	//inits the renderer
 	static void Init();
-	//destroys the renderer
-	static void Destroy();
+	//shutsdown the renderer
+	static void Shutdown();
 
 	//starts a section of render code
 	static void Begin();
 	//ends a section of render code
 	static void End();
-
-	//starts dock space
-
-	static void DockSpace(bool* p_open);
 
 	//updates the GUI flags for ImGUI
 	static void UpdateImGUIFlags();

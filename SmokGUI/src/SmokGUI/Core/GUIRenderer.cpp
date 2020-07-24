@@ -57,7 +57,7 @@ void GUIRenderer::Init()
 }
 
 //destroys the renderer
-void GUIRenderer::Destroy()
+void GUIRenderer::Shutdown()
 {
 #ifdef DISABLE_SMOK_GUI
     return;

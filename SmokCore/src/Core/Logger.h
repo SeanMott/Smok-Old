@@ -29,6 +29,10 @@ public:
 	static void LogMessageAlways(const char* message);
 	//logs a message no matter what
 	static void LogMessageAlways(const std::string& message);
+	//logs a error message no matter what
+	static void LogErrorAlways(const char* type, const char* message);
+	//logs a error message no matter what
+	static void LogErrorAlways(const std::string& type, const std::string& message);
 
 	//sets the log error flag || logs error of a type only once
 	inline static void SetLogErrorFlag(bool state) { logErrorOnce = state; }

@@ -8,35 +8,58 @@ registry EntityManager::entityRegistry;
 vector<string> EntityManager::layers;
 
 //create entity
-Entity* EntityManager::Create(const char* name)
+Entity& EntityManager::Create(const char* name)
 {
 	if (IsEntity(name))
 	{
-		Logger::LogError("Entity", (string)name + " is already a name of a entity.");
-		//printf("%s is already a name of a entity\n", name);
-		//entity e;
-		return nullptr;
+		//Logger::LogErrorAlways("Entity", (string)name + " is already a name of a entity.");
+
+		//appends numbers to the name
+		string n = name;
+		unsigned long entityCount = 0;
+		while (IsEntity(n))
+		{
+			entityCount++;
+			n = name + to_string(entityCount);
+			if (!IsEntity(n))
+				break;
+		}
+
+		entity e = entityRegistry.create();
+		entities.emplace_back(n, e);
+		return entities[entities.size() - 1];
 	}
 
 	entity e = entityRegistry.create();
 	entities.emplace_back(name, e);
-	return &entities[entities.size() - 1];
+	return entities[entities.size() - 1];
 }
 
 //create entity
-Entity* EntityManager::Create(const string& name)
+Entity& EntityManager::Create(const string& name)
 {
 	if (IsEntity(name))
 	{
-		Logger::LogError("Entity", name + " is already a name of a entity.");
-		//printf("%s is already a name of a entity\n", name);
-		//entity e;
-		return nullptr;
+		//Logger::LogErrorAlways("Entity", name + " is already a name of a entity.");
+
+		//appends numbers to the name
+		string n = name;
+		unsigned long entityCount = 0;
+		while (IsEntity(n))
+		{
+			n += to_string(entityCount);
+			if (!IsEntity(n))
+				break;
+		}
+
+		entity e = entityRegistry.create();
+		entities.emplace_back(n, e);
+		return entities[entities.size() - 1];
 	}
 
 	entity e = entityRegistry.create();
 	entities.emplace_back(name, e);
-	return &entities[entities.size() - 1];
+	return entities[entities.size() - 1];
 }
 
 //destroy entity
@@ -53,7 +76,7 @@ void EntityManager::Destroy(std::string& name)
 		}
 	}
 
-	Logger::LogError("Entity", name + " is not a entity.");
+	Logger::LogErrorAlways("Entity", name + " is not a entity.");
 	//printf("%s is not a entity\n", name.c_str());
 }
 
@@ -67,7 +90,7 @@ Entity* EntityManager::GetEntity(const string& name)
 	}
 
 	//printf("%s is not a entity\n", name.c_str());
-	Logger::LogError("Entity", name + " is not a entity.");
+	Logger::LogErrorAlways("Entity", name + " is not a entity.");
 	return nullptr;
 }
 
@@ -97,7 +120,7 @@ void EntityManager::AddLayer(const string& name)
 	if (IsLayer(name))
 	{
 		//printf("%s is already a layer name.\n", name.c_str());
-		Logger::LogError("Layer", name + " is already a layer.");
+		Logger::LogErrorAlways("Layer", name + " is already a layer.");
 		return;
 	}
 
@@ -110,7 +133,7 @@ void EntityManager::RemoveLayer(const string& name)
 	if (!IsLayer(name))
 	{
 		//printf("%s is not a layer name.\n", name.c_str());
-		Logger::LogError("Layer", name + " is not a layer.");
+		Logger::LogErrorAlways("Layer", name + " is not a layer.");
 		return;
 	}
 

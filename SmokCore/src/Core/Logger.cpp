@@ -97,3 +97,31 @@ bool Logger::logErrorOnce = false; //only logs a error of a type once
 	{
 		printf("%s\n", message.c_str());
 	}
+
+	//logs a error message no matter what
+	void Logger::LogErrorAlways(const string& type, const string& message)
+	{
+
+		if (logErrorOnce)
+		{
+			if (IsError(type))
+				return;
+		}
+
+		printf("ERROR, Type: %s || %s\n", type.c_str(), message.c_str());
+		AddErrorType(type);
+	}
+
+	//logs a error message no matter what
+	void Logger::LogErrorAlways(const char* type, const char* message)
+	{
+
+		if (logErrorOnce)
+		{
+			if (IsError(type))
+				return;
+		}
+
+		printf("ERROR, Type: %s || %s\n", type, message);
+		AddErrorType(type);
+	}

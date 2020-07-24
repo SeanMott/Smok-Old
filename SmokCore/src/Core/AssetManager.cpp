@@ -10,7 +10,7 @@ void AssetManager::LoadShader(const string& name, const string& vertexPath, cons
 {
 	if (IsShader(name))
 	{
-		Logger::LogError("Asset", name + " is already a shader.");
+		Logger::LogErrorAlways("Asset", name + " is already a shader.");
 		return;
 	}
 
@@ -21,7 +21,7 @@ void AssetManager::LoadGeometryShader(const string& name, const string& geometry
 {
 	if (IsShader(name))
 	{
-		Logger::LogError("Asset", name + " is already a shader.");
+		Logger::LogErrorAlways("Asset", name + " is already a shader.");
 		return;
 	}
 
@@ -32,7 +32,7 @@ void AssetManager::LoadComputeShader(const string& name, const string& computePa
 {
 	if (IsShader(name))
 	{
-		Logger::LogError("Asset", name + " is already a shader.");
+		Logger::LogErrorAlways("Asset", name + " is already a shader.");
 		return;
 	}
 
@@ -43,7 +43,7 @@ void AssetManager::DestroyShader(const string& name)
 {
 	if (!IsShader(name))
 	{
-		Logger::LogError("Asset", name + " is not a shader.");
+		Logger::LogErrorAlways("Asset", name + " is not a shader.");
 		return;
 	}
 
@@ -55,7 +55,7 @@ Shader* AssetManager::GetShader(const string& name)
 {
 	if (!IsShader(name))
 	{
-		Logger::LogError("Asset", name + " is not a shader.");
+		Logger::LogErrorAlways("Asset", name + " is not a shader.");
 		return nullptr;
 	}
 
@@ -66,7 +66,7 @@ void AssetManager::LoadTexture(const string& name, const string& path)
 {
 	if (IsTexture(name))
 	{
-		Logger::LogError("Asset", name + " is not a texture.");
+		Logger::LogErrorAlways("Asset", name + " is not a texture.");
 		return;
 	}
 
@@ -77,7 +77,7 @@ void AssetManager::DestroyTexture(const string& name)
 {
 	if (!IsTexture(name))
 	{
-		Logger::LogError("Asset", name + " is not a texture.");
+		Logger::LogErrorAlways("Asset", name + " is not a texture.");
 		return;
 	}
 
@@ -89,7 +89,7 @@ Texture* AssetManager::GetTexture(const string& name)
 {
 	if (!IsTexture(name))
 	{
-		Logger::LogError("Asset", name + " is not a texture.");
+		Logger::LogErrorAlways("Asset", name + " is not a texture.");
 		return nullptr;
 	}
 

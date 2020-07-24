@@ -16,21 +16,21 @@ Texture* Texture::Create(const string& filePath)
 
 	if (type == RenderAPIType::Vulkin)
 	{
-		Logger::LogError("Texture", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Texture", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinTexture(filePath);
 		return new OpenglTexture(filePath);
 	}
 
 	else if (type == RenderAPIType::DirectX)
 	{
-		Logger::LogError("Texture", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Texture", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXTexture(filePath);
 		return new OpenglTexture(filePath);
 	}
 
 	else if (type == RenderAPIType::Metal)
 	{
-		Logger::LogError("Texture", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Texture", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalTexture(filePath);
 		return new OpenglTexture(filePath);
 	}

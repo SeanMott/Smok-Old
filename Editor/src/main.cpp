@@ -37,10 +37,15 @@
 //#include <stb_image.h>
 
 #include <glm.hpp>
+#include <vector>
 //#include <gtc/matrix_transform.hpp>
 //#include <gtc/type_ptr.hpp>
 
 //#include <stdio.h>
+
+//#include <future>
+
+#include <Core\ScriptEngine\ScriptEngine.h>
 
 #ifndef SMOK_DIST
 #include <iostream>
@@ -60,14 +65,12 @@ private:
 
 	vec2 viewportSize;
 
-	static unsigned long entityCount;
-
 	//methods
 public:
 
 	void Draw()
 	{
-		entityCount = EntityManager::GetAllEntities().size();
+		static Entity* selectedEntity = nullptr;
 
 		//top menu
 		if (ImGui::BeginMenuBar())
@@ -100,18 +103,19 @@ public:
 
 			if (ImGui::BeginMenu("Edit"))
 			{
+				
 				//makes a entity
-				if (ImGui::MenuItem("New Entity")) EntityManager::Create("Entity" + to_string(entityCount)); //Logger::LogMessageAlways("Making a Entity through the editor is currently not supported, check GitHub for updates.");
+				if (ImGui::MenuItem("New Entity")) EntityManager::Create("Entity"); //Logger::LogMessageAlways("Making a Entity through the editor is currently not supported, check GitHub for updates.");
 
 				//makes a script
-				if (ImGui::MenuItem("New Script")) Logger::LogMessageAlways("Making a Script through the editor is currently not supported, check GitHub for updates.");
+				if (ImGui::MenuItem("New Script")) ScriptEngine::GenScript("TestScript", "C:/Dev/SmokTest/src/Scripts"/*src/Scripts"*//**/); //Logger::LogMessageAlways("Making a Script through the editor is currently not supported, check GitHub for updates.");
 
 				//makes a system
-				if (ImGui::MenuItem("New System")) Logger::LogMessageAlways("Making a System through the editor is currently not supported, check GitHub for updates.");
+				if (ImGui::MenuItem("New System")) ScriptEngine::GenSystem("TestSystem", "C:/Dev/SmokTest/src/ECS/Systems"); //Logger::LogMessageAlways("Making a System through the editor is currently not supported, check GitHub for updates.");
 
 				//makes a component
-				if (ImGui::MenuItem("New Component")) Logger::LogMessageAlways("Making a Component through the editor is currently not supported, check GitHub for updates.");
-
+				if (ImGui::MenuItem("New Component")) ScriptEngine::GenComponent("TestComponent", "C:/Dev/SmokTest/src/ECS/Components"); //Logger::LogMessageAlways("Making a Component through the editor is currently not supported, check GitHub for updates.");
+				
 				ImGui::EndMenu();
 			}
 
@@ -122,6 +126,9 @@ public:
 
 				//shows all loaded systems
 				if (ImGui::MenuItem("Systems")) Logger::LogMessageAlways("Showing a window of all enabled and disabled systems through the editor is currently not supported, check GitHub for updates.");
+
+				//shows Script Engine settings
+				if (ImGui::MenuItem("Settings")) Logger::LogMessageAlways("Showing a window of settings for the Script Engine through the editor is currently not supported, check GitHub for updates.");
 
 				ImGui::EndMenu();
 			}
@@ -167,8 +174,11 @@ public:
 		ImGui::Begin("Entity Hierarchy");
 		vector<Entity> entities = EntityManager::GetAllEntities();
 
-		for (unsigned int i = 0; i < entityCount; i++)
-			ImGui::Text(entities[i].name.c_str());
+		for (unsigned int i = 0; i < entities.size(); i++)
+			if (ImGui::Button(entities[i].name.c_str()))
+				selectedEntity = &entities[i];
+
+		//ImGui::Button("Entity Button", ImVec2(45, 30));
 
 		ImGui::End();
 
@@ -198,10 +208,31 @@ public:
 		ImGui::PopStyleVar();
 
 		//asset bar
+		ImGui::Begin("Assets");
+		
+		vector<FileData> files;// = ScriptEngine::GetFiles();
+		FileType type;
+		string text;
+
+		if (files.size() > 0)
+		{
+			for (unsigned int i = 0; files.size(); i++)
+			{
+				type = files[i].type;
+
+				if (type == FileType::Component)
+					text = "Component: " + files[i].name;
+				else if (type == FileType::System)
+					text = "System: " + files[i].name;
+				else
+					text = "Script: " + files[i].name;
+
+				ImGui::Text(text.c_str());
+			}
+		}
+		ImGui::End();
 	}
 };
-
-unsigned long Editor::entityCount;
 
 //camera controller
 class CameraCon
@@ -215,7 +246,8 @@ private:
 	//method
 public:
 
-	Transform* camTrans; //temp move back to private after OnSceneStart events are triggered
+	//Entity* cam;
+	Transform* camTrans = nullptr; //temp move back to private after OnSceneStart events are triggered
 
 	//when the scene loads
 	void Start()
@@ -259,9 +291,9 @@ int main(int args, char* argv[])
 	GUIRenderer::Init();
 
 	//--load assets
-	AssetManager::LoadShader("Shader", "res\\Shaders\\Vertex.shader", "res\\Shaders\\Fragment.shader");
-	AssetManager::LoadTexture("Face", "res\\Textures\\awesomeface.png");
-	AssetManager::LoadTexture("Con", "res\\Textures\\container.jpg");
+	AssetManager::LoadShader("Shader", "res/Shaders/Vertex.shader", "res/Shaders/Fragment.shader");
+	AssetManager::LoadTexture("Face", "res/Textures/awesomeface.png");
+	AssetManager::LoadTexture("Con", "res/Textures/container.jpg");
 
 	FrameBufferData data;
 	data.width = 400;
@@ -273,31 +305,42 @@ int main(int args, char* argv[])
 	Application::customeFrameBuffer = sceneFrameBuffer; //fb = sceneFrameBuffer;
 
 	//--load entities
-	EntityManager::Create("Camera");
-	EntityManager::AddComponet<OrthographicCamera>("Camera", (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
-	EntityManager::AddComponet<Transform>("Camera");//, vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+	Entity cam = EntityManager::Create("Camera");
+	cam.AddComponet<OrthographicCamera>((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	cam.AddComponet<Transform>();
+	//EntityManager::AddComponet<OrthographicCamera>("Camera", (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+	//EntityManager::AddComponet<Transform>("Camera");//, vec3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
 	//create entites with sprites
-	EntityManager::Create("Face1");
-	EntityManager::AddComponet<Transform>("Face1", vec3(150.0f, 170.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
-	EntityManager::AddComponet<Sprite>("Face1", "Con", (unsigned int)0, "Shader");
+	Entity face1 = EntityManager::Create("Face");
+	face1.AddComponet<Transform>(vec3(150.0f, 170.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	face1.AddComponet<Sprite>("Con", (unsigned int)0, "Shader");
+	//EntityManager::AddComponet<Transform>("Face", vec3(150.0f, 170.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	//EntityManager::AddComponet<Sprite>("Face", "Con", (unsigned int)0, "Shader");
 
-	EntityManager::Create("Face2");
-	EntityManager::AddComponet<Transform>("Face2", vec3(50.0f, 200.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
-	EntityManager::AddComponet<Sprite>("Face2", "Face", (unsigned int)1, "Shader");
+	Entity face2 = EntityManager::Create("Face");
+	face2.AddComponet<Transform>(vec3(50.0f, 200.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	face2.AddComponet<Sprite>("Face", (unsigned int)1, "Shader");
+	//EntityManager::AddComponet<Transform>("Face1", vec3(50.0f, 200.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	//EntityManager::AddComponet<Sprite>("Face1", "Face", (unsigned int)1, "Shader");
 
-	EntityManager::Create("Face3");
-	EntityManager::AddComponet<Transform>("Face3", vec3(550.0f, 100.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
-	EntityManager::AddComponet<Sprite>("Face3", "Con", (unsigned int)0, "Shader");
+	Entity face3 = EntityManager::Create("Face");
+	face3.AddComponet<Transform>(vec3(550.0f, 100.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	face3.AddComponet<Sprite>("Con", (unsigned int)0, "Shader");
+	//EntityManager::AddComponet<Transform>("Face2", vec3(550.0f, 100.0f, 0.0f), vec3(45.0f, 0.0f, 0.0f), vec3(2.0f, 2.0f, 1.0f));
+	//EntityManager::AddComponet<Sprite>("Face2", "Con", (unsigned int)0, "Shader");
 
 	//--link systems and scripts
 
 	CameraCon camCon;
-	camCon.camTrans = &EntityManager::GetComponent<Transform>("Camera"); //OnSceneLoadEvent::AddMethod(&camCon, &CameraCon::Start);
+	camCon.camTrans = cam.GetComponent<Transform>(); // &EntityManager::GetComponent<Transform>("Camera"); //OnSceneLoadEvent::AddMethod(&camCon, &CameraCon::Start);
 	UpdateEvent::AddMethod(&camCon, &CameraCon::Update);
+
+	//face2->GetComponent<Transform>();
 
 	Editor editor;
 	ECSGUIRenderEvent::AddMethod(&editor, &Editor::Draw);
+	ScriptEngine::Init();
 
 	SpriteRenderer::Init();
 
@@ -307,13 +350,15 @@ int main(int args, char* argv[])
 	//--clean up data
 
 	//systems
-	GUIRenderer::Destroy();
+	SpriteRenderer::Shutdown();
+	ScriptEngine::Shutdown();
+	GUIRenderer::Shutdown();
 
 	//entities
 	EntityManager::DestroyAllEntities();
 
 	//assets
-	/*sceneFrameBuffer->Destroy();*/ Application::customeFrameBuffer->Destroy();
+	Application::customeFrameBuffer->Destroy();
 	AssetManager::DestroyAllAssets();
 
 	Application::Destroy();

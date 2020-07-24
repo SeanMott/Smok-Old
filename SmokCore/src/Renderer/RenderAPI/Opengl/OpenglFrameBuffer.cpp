@@ -47,7 +47,7 @@ void OpenglFrameBuffer::Recreate(unsigned int colorBufferCount, unsigned int dep
 	CreateStencilBuffer(stencilBufferCount);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		Logger::LogError("Frame Buffer Opengl", "Frame Buffer is incomplete");
+		Logger::LogErrorAlways("Frame Buffer Opengl", "Frame Buffer is incomplete");
 }
 
 //resizes the frame buffer
@@ -176,7 +176,7 @@ unsigned int OpenglFrameBuffer::GetColorBufferId() const
 {
 	if (data.colorBufferIds.size() < 1)
 	{
-		Logger::LogError("Frame Buffer Opengl", "No Color Buffers are attachted");
+		Logger::LogErrorAlways("Frame Buffer Opengl", "No Color Buffers are attachted");
 		return (unsigned int)0;
 	}
 
@@ -187,7 +187,7 @@ unsigned int OpenglFrameBuffer::GetDepthBufferId() const
 {
 	if (data.depthBufferIds.size() < 1)
 	{
-		Logger::LogError("Frame Buffer Opengl", "No Depth Buffers are attachted");
+		Logger::LogErrorAlways("Frame Buffer Opengl", "No Depth Buffers are attachted");
 		return (unsigned int)0;
 	}
 
@@ -198,7 +198,7 @@ unsigned int OpenglFrameBuffer::GetStencilBufferId() const
 {
 	if (data.stencilBufferIds.size() < 1)
 	{
-		Logger::LogError("Frame Buffer Opengl", "No Stencil Buffers are attachted");
+		Logger::LogErrorAlways("Frame Buffer Opengl", "No Stencil Buffers are attachted");
 		return (unsigned int)0;
 	}
 

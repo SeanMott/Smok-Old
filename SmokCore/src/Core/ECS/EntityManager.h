@@ -13,19 +13,73 @@
 struct Entity
 {
 	std::string name = "Entity";
-	entt::entity entity;
-	//std::string layer = "Base";
+	entt::entity entity{ 0 };
 
+	//Constructor
 	Entity(const std::string n, entt::entity& e)
 	{
 		name = n;
 		entity = e;
 	}
 
+	//Constructor
 	Entity(const char* n, entt::entity& e)
 	{
 		name = n;
 		entity = e;
+	}
+
+	//adds a component || returns a pointer
+	template<typename Comp, typename... Args>
+	Comp* AddComponet(Args&&... args)
+	{
+		return &EntityManager::GetReg().emplace<Comp>(entity, std::forward<Args>(args)...);
+	}
+
+	//removes a component
+	template<typename Comp>
+	inline void RemoveComponet()
+	{
+		if (!EntityManager::GetReg().valid(entity))
+		{
+			Logger::LogError("Entity", name + " is not a valid entity.");
+			return;
+		}
+
+		if (!HasComponent<Comp>())
+		{
+			Logger::LogErrorAlways("Entity", name + " does not have this Component add one first.");
+			return;
+		}
+
+		EntityManager::GetReg().remove<Comp>(entity);
+	}
+
+	//gets a component || returns a pointer
+	template<typename Comp>
+	inline Comp* GetComponent()
+	{
+		if (!EntityManager::GetReg().valid(entity))
+		{
+			//Logger::LogError("Entity", name + " is not a valid entity.");
+			return nullptr;
+		}
+
+		if (!HasComponent<Comp>())
+		{
+			Logger::LogErrorAlways("Entity", name + " does not have this Component add one first.");
+			return nullptr;
+		}
+
+		return &EntityManager::GetReg().get<Comp>(EntityManager::GetEntity(name)->entity);
+		//return entityRegistry.get<Comp>(entities[i].entity);
+	}
+
+	//checks if has a component
+	template<typename Comp>
+	inline bool HasComponent()
+	{
+		return EntityManager::GetReg().has<Comp>(entity);
 	}
 };
 
@@ -45,9 +99,9 @@ public:
 	static inline std::vector<std::string>& GetLayers() { return layers; }
 
 	//create entity
-	static Entity* Create(const char* name);
+	static Entity& Create(const char* name);
 	//create entity
-	static Entity* Create(const std::string& name);
+	static Entity& Create(const std::string& name);
 	//destroy entity
 	static void Destroy(std::string& name);
 	//gets a entity
@@ -59,25 +113,50 @@ public:
 
 	//adds a component
 	template<typename Comp, typename... Args>
-	static inline void AddComponet(char* name, Args&&... args)
+	static inline void AddComponet(const char* name, Args&&... args)
 	{
-		entityRegistry.emplace<Comp>(GetEntity(name)->entity, std::forward<Args>(args)...);//std::forward<Args>(args)...);
+		entityRegistry.emplace<Comp>(GetEntity(name)->entity, std::forward<Args>(args)...);
 	}
+
+	//adds a component
+	template<typename Comp, typename... Args>
+	static inline void AddComponet(const std::string& name, Args&&... args)
+	{
+		entityRegistry.emplace<Comp>(GetEntity(name)->entity, std::forward<Args>(args)...);
+	}
+
 	//gets a component
 	template<typename Comp>
-	static inline Comp& GetComponent(char* name)
+	static inline Comp& GetComponent(const char* name)
 	{
 		for (unsigned int i = 0; i < entities.size(); i++)
 		{
 			if(entities[i].name == name)
 				return entityRegistry.get<Comp>(entities[i].entity);
 		}
-
-		
 	}
+
+	//gets a component
+	template<typename Comp>
+	static inline Comp& GetComponent(const std::string& name)
+	{
+		for (unsigned int i = 0; i < entities.size(); i++)
+		{
+			if (entities[i].name == name)
+				return entityRegistry.get<Comp>(entities[i].entity);
+		}
+	}
+
 	//removes the component
 	template<typename Comp>
-	static inline void RemoveComponet(char* name)
+	static inline void RemoveComponet(const char* name)
+	{
+		entityRegistry.remove<Comp>(GetEntity(name)->entity);
+	}
+
+	//removes the component
+	template<typename Comp>
+	static inline void RemoveComponet(const std::string& name)
 	{
 		entityRegistry.remove<Comp>(GetEntity(name)->entity);
 	}

@@ -61,7 +61,7 @@ void SpriteRenderer::Init()
 }
 
 //shuts down the sprite renderer
-void SpriteRenderer::Destroy()
+void SpriteRenderer::Shutdown()
 {
 	if(spriteBuffer)
 		spriteBuffer->Destroy();
@@ -84,14 +84,14 @@ void SpriteRenderer::Render()
 
 	if (!spriteBuffer && !hasSentWarning)
 	{
-		Logger::LogError("Sprite Renderer", "Sprite Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
+		Logger::LogErrorAlways("Sprite Renderer", "Sprite Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
 		hasSentWarning = true;
 		return;
 	}
 
 	if (!spriteIndexBuffer && !hasSentWarning)
 	{
-		Logger::LogError("Sprite Renderer", "Sprite Index Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
+		Logger::LogErrorAlways("Sprite Renderer", "Sprite Index Buffer was not initialised properly, make sure DISABLE_SMOK_2D was not defined and or project settings enable Smok 2D.");
 		hasSentWarning = true;
 		return;
 	}
@@ -103,7 +103,7 @@ void SpriteRenderer::Render()
 	auto c = EntityManager::GetReg().view<OrthographicCamera, Transform>();
 	if (c.size() < 1)
 	{
-		Logger::LogError("Sprite Renderer", "No Orhtographic Camera components were found, at least put one but make it inactive if you don't want it.");
+		Logger::LogErrorAlways("Sprite Renderer", "No Orhtographic Camera components were found, at least put one but make it inactive if you don't want it.");
 		hasSentWarning = true;
 		return;
 	}

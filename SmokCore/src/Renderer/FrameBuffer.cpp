@@ -14,21 +14,21 @@ FrameBuffer* FrameBuffer::Create(const FrameBufferData& data)
 
 	if (type == RenderAPIType::Vulkin)
 	{
-		Logger::LogError("Frame Buffer", "Vulkin is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Frame Buffer", "Vulkin is currently not supported, Opengl will be used.");
 		//return new VulkinFrameBuffer(data);
 		return new OpenglFrameBuffer(data);
 	}
 
 	else if (type == RenderAPIType::DirectX)
 	{
-		Logger::LogError("Frame Buffer", "DirectX is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Frame Buffer", "DirectX is currently not supported, Opengl will be used.");
 		//return new DirectXFrameBuffer(data);
 		return new OpenglFrameBuffer(data);
 	}
 
 	else if (type == RenderAPIType::Metal)
 	{
-		Logger::LogError("Frame Buffer", "Metal is currently not supported, Opengl will be used.");
+		Logger::LogErrorAlways("Frame Buffer", "Metal is currently not supported, Opengl will be used.");
 		//return new MetalFrameBuffer(data);
 		return new OpenglFrameBuffer(data);
 	}

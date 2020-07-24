@@ -19,7 +19,7 @@ bool OpenglGraphicContext::Init(void* _window)
 	//init GLAD
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		Logger::LogError("Opengl API", "Failed to initialize GLAD.");
+		Logger::LogErrorAlways("Opengl API", "Failed to initialize GLAD.");
 		return false;
 	}
 
