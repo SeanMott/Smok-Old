@@ -18,7 +18,12 @@ Smok2D has all the 2D based componets and systems. This is sprite renderer, 2D p
 
 - Smok3D
 
-Smok3D has all the 3D based componets and systems. This is mesh renderer, 3D physics, particals, ect. This module can be disabled by defining DISABLE_SMOK_3D.
+Smok3D has all the 3D based componets and systems. This is mesh renderer, 3D physics, particals, ect. This module can be disabled by defining DISABLE_SMOK_3D. <br >
+
+# Scripts, Components, and Systems
+
+Smok has three ways to interact with the engine, Systems, Components, and Scripts. Systems are hooked into engine events and use the Components that are attachted to entities. Scripts are attachted to entities like Components but have specal events that only trigger for Scripts. They are similar to Unreal, Unity, or Godot scripts, they don't require inhereting from a class. The only thing you have to make sure is that the methods hooked into a event matchs the return and paramater type. Otherwise you can change the name of the method and the paramaters.
+
 
 # Libraries
 - [GLM - Math](http://glm.g-truc.net/0.9.8/index.html)
