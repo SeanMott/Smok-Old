@@ -3,6 +3,7 @@
 
 #include <Renderer\Display.h>
 #include <Core\Events\EngineEvents.h>
+#include <Core\Events\ScriptEvents.h>
 #include <Core\ECS\EntityManager.h>
 #include <Core\Input.h>
 
@@ -49,18 +50,18 @@ void Application::Run()
 		DisplayI.GetContext()->Clear(); //clears the screen
 
 		//update
-		UpdateEvent::Call(DisplayI.GetDeltaTime() * 2);
+		ScriptUpdateEvent::Call(DisplayI.GetDeltaTime() * 2);
+		ECSUpdateEvent::Call(DisplayI.GetDeltaTime() * 2);
 
 		//fixed update
-		FixedUpdateEvent::Call(FIXED_UPDATE_RATE);
+		ECSFixedUpdateEvent::Call(FIXED_UPDATE_RATE);
+		ScriptFixedUpdateEvent::Call(FIXED_UPDATE_RATE);
 
 		//trigger systems
 		ECSSystemEvent::Call(); //handles all systems except GUI based ones.
 
 		if (customeFrameBuffer)
 			customeFrameBuffer->Unbind();
-
-		//DisplayI.GetContext()->Clear();
 
 		/*
 		ECSRenderEvent::Call()
@@ -71,14 +72,9 @@ void Application::Run()
 
 		ECSGUIRenderEvent::Call(); //allows GUI to be rendered and triggered over the scene.
 
-		//DisplayI.GetContext()->IndexBufferDrawCall(0, 6);
-		//DisplayI.GetContext()->Clear();
-
 		if (!DisplayI.IsRunning())
 			break;
 
 		DisplayI.Update(); //swaps render buffers
-
-		//DisplayI.GetContext()->Clear();
 	}
 }

@@ -1,116 +1,13 @@
-//stores engine events || ECS Systems, Update, Fixed Update
+//the events triggered for events
 
-#ifndef ECSEvents_h
-#define ECSEvents_h
+#ifndef ScriptEvents_h
+#define ScriptEvents_h
 
 #include <vector>
 #include <FastDelegate.h>
 
-//triggers ECS systems
-class ECSSystemEvent
-{
-	//vars
-private:
-	static std::vector<fastdelegate::DelegateMemento> methods;
-	static fastdelegate::FastDelegate0<void> system;
-
-	//methods
-public:
-
-	//adds a method || pass as a pointer
-	template<typename ClassInstance, typename MethodName>
-	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
-	{
-		system.bind(classInstance, methodName);
-		methods.emplace_back(system.GetMemento());
-	}
-
-	//adds a method || pass as a pointer
-	template<typename MethodName>
-	static inline void AddMethod(MethodName methodName)
-	{
-		system.bind(methodName);
-		methods.emplace_back(system.GetMemento());
-	}
-
-	//removes a method
-
-	//calls all methods
-	static inline void Call()
-	{
-		if (methods.size() > 0)
-		{
-			for (unsigned int i = 0; i < methods.size(); i++)
-			{
-				system.SetMemento(methods[i]);
-				system();
-			}
-		}
-	}
-};
-
-//triggers GUI Render methods
-class ECSGUIRenderEvent
-{
-	//vars
-private:
-	static std::vector<fastdelegate::DelegateMemento> methods;
-	static fastdelegate::FastDelegate0<void> system;
-
-	//the begin and end of the Smok GUI Renderer
-	static fastdelegate::FastDelegate0<void> begin;
-	static fastdelegate::FastDelegate0<void> end;
-
-	//methods
-public:
-
-	//adds a method || pass as a pointer
-	template<typename ClassInstance, typename MethodName>
-	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
-	{
-		system.bind(classInstance, methodName);
-		methods.emplace_back(system.GetMemento());
-	}
-
-	//adds a method || pass as a pointer
-	template<typename MethodName>
-	static inline void AddMethod(MethodName methodName)
-	{
-		system.bind(methodName);
-		methods.emplace_back(system.GetMemento());
-	}
-
-	//removes a method
-
-	//binds the needed renderer methods || only used by the Smok GUI renderer
-	template<typename BeginMethod, typename EndMethod>
-	static inline void RendererBind(BeginMethod beginMethod, EndMethod endMethod)
-	{
-		begin.bind(beginMethod);
-		end.bind(endMethod);
-	}
-
-	//calls all methods
-	static inline void Call()
-	{
-		if (methods.size() > 0)
-		{
-			begin(); //calls Smok GUI GUI Renderer begin
-
-			for (unsigned int i = 0; i < methods.size(); i++)
-			{
-
-				system.SetMemento(methods[i]);
-				system();
-			}
-
-			end(); //calls Smok GUI GUI Renderer end
-		}
-	}
-};
-
-//triggers Update events for
-class ECSUpdateEvent
+//triggers Update events for scripts
+class ScriptUpdateEvent
 {
 	//vars
 private:
@@ -152,8 +49,8 @@ public:
 	}
 };
 
-//triggers Fixed Update events
-class ECSFixedUpdateEvent
+//triggers Fixed Update events for scripts
+class ScriptFixedUpdateEvent
 {
 	//vars
 private:
@@ -190,6 +87,92 @@ public:
 			{
 				fixedUpdate.SetMemento(methods[i]);
 				fixedUpdate(fixedDeltaTime);
+			}
+		}
+	}
+};
+
+//triggers start events for scripts
+class ScriptStartEvent
+{
+	//vars
+private:
+	static std::vector<fastdelegate::DelegateMemento> methods;
+	static fastdelegate::FastDelegate0<void> start;
+
+	//methods
+public:
+
+	//adds a method || pass as a pointer
+	template<typename ClassInstance, typename MethodName>
+	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
+	{
+		start.bind(classInstance, methodName);
+		methods.emplace_back(start.GetMemento());
+	}
+
+	//adds a method || pass as a pointer
+	template<typename MethodName>
+	static inline void AddMethod(MethodName methodName)
+	{
+		start.bind(methodName);
+		methods.emplace_back(start.GetMemento());
+	}
+
+	//removes a method
+
+	//calls all methods
+	static inline void Call()
+	{
+		if (methods.size() > 0)
+		{
+			for (unsigned int i = 0; i < methods.size(); i++)
+			{
+				start.SetMemento(methods[i]);
+				start();
+			}
+		}
+	}
+};
+
+//triggers end events for scripts
+class ScriptEndEvent
+{
+	//vars
+private:
+	static std::vector<fastdelegate::DelegateMemento> methods;
+	static fastdelegate::FastDelegate0<void> end;
+
+	//methods
+public:
+
+	//adds a method || pass as a pointer
+	template<typename ClassInstance, typename MethodName>
+	static inline void AddMethod(ClassInstance classInstance, MethodName methodName)
+	{
+		end.bind(classInstance, methodName);
+		methods.emplace_back(end.GetMemento());
+	}
+
+	//adds a method || pass as a pointer
+	template<typename MethodName>
+	static inline void AddMethod(MethodName methodName)
+	{
+		end.bind(methodName);
+		methods.emplace_back(end.GetMemento());
+	}
+
+	//removes a method
+
+	//calls all methods
+	static inline void Call()
+	{
+		if (methods.size() > 0)
+		{
+			for (unsigned int i = 0; i < methods.size(); i++)
+			{
+				end.SetMemento(methods[i]);
+				end();
 			}
 		}
 	}

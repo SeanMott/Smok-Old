@@ -1,7 +1,7 @@
 workspace "Smok"
     --architecture "x86_64"
     architecture "x86"
-    startproject "SmokCore"
+    startproject "Sandbox"
 
     configurations
     {
@@ -272,3 +272,64 @@ project "Smok3D"
     filter "configurations:Dist"
         defines "SMOK_DIST"
         optimize "On"
+
+--Sandbox used to test the engine
+project "Sandbox"
+location "Sandbox"
+kind "ConsoleApp"
+language "C++"
+
+targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+objdir ("bin-obj/" .. outputdir .. "/%{prj.name}")
+
+--pchheader "smpch.h"
+--pchsource "%{prj.name}/src/smpch.cpp"
+
+files 
+{
+    "%{prj.name}/src/**.h",
+    "%{prj.name}/src/**.hpp",
+    "%{prj.name}/src/**.c",
+    "%{prj.name}/src/**.cpp"
+}
+
+includedirs
+{
+    "%{includeDir.glm}",
+    "%{includeDir.FastDelegate}",
+    "%{includeDir.entt}",
+    "SmokCore/src",
+    "Smok2D/src",
+    "SmokGUI/src",
+    "Sandbox/src"
+}
+
+links
+{
+    "SmokCore",
+    "Smok2D",
+    "SmokGUI"
+}
+
+filter "system:windows"
+    cppdialect "C++17"
+    staticruntime "On"
+    systemversion "latest"
+
+    defines
+    {
+        "Window_Build",
+        "GLFW_INCLUDE_NONE"
+    }
+
+filter "configurations:Debug"
+    defines "SMOK_DEBUG"
+    symbols "On"
+
+filter "configurations:Release"
+    defines "SMOK_RELEASE"
+    optimize "On"
+
+filter "configurations:Dist"
+    defines "SMOK_DIST"
+    optimize "On"

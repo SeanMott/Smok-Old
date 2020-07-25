@@ -9,6 +9,7 @@
 #include <Core\Events\InputEvents.h>
 #include <Core\Events\EngineEvents.h>
 #include <Core\Events\WindowEvents.h>
+//#include <Core\Events\ScriptEvents.h>
 
 #include <SmokGUI\ImGUIBuild.h>
 
@@ -51,7 +52,7 @@ void GUIRenderer::Init()
     MouseMoveEvent::AddMethod(&GUIRenderer::MouseMove);
     MouseScrollEvent::AddMethod(&GUIRenderer::MouseScroll);
     //WindowResizeEvent::AddMethod(&GUIRenderer::OnResize);
-    UpdateEvent::AddMethod(&GUIRenderer::UpdateDeltaTime);
+    ECSUpdateEvent::AddMethod(&GUIRenderer::UpdateDeltaTime);
 
     ECSGUIRenderEvent::RendererBind(&GUIRenderer::Begin, &GUIRenderer::End);
 }

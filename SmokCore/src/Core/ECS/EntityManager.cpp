@@ -7,6 +7,35 @@ vector<Entity> EntityManager::entities;
 registry EntityManager::entityRegistry;
 vector<string> EntityManager::layers;
 
+
+//-----------------ENTITY-----------------------
+
+//adds a script || pass as pointer
+void Entity::AddScript(void* script, const std::string& name)
+{
+	EntityManager::AddScript(this->name, script, name);
+}
+
+//removes a Script
+void Entity::RemoveScript(const string& name)
+{
+	EntityManager::RemoveScript(this->name, name);
+}
+
+//gets a Script
+void* Entity::GetScript(const string& name)
+{
+	return EntityManager::GetScript(this->name, name);
+}
+
+//checks if it has a Script
+bool Entity::HasScript(const string& name)
+{
+	return EntityManager::HasScript(this->name, name);
+}
+
+//-------------ENTITY MANAGER---------------
+
 //create entity
 Entity& EntityManager::Create(const char* name)
 {
@@ -107,9 +136,31 @@ bool EntityManager::IsEntity(const string& name)
 	return false;
 }
 
-//destroys all entities
+//destroys all entities || except scene independent ones
 void EntityManager::DestroyAllEntities()
 {
+	if (entities.size() < 1)
+		return;
+
+	vector<Entity>::iterator it;
+
+	for (unsigned int i = 0; i < entities.size(); i++)
+	{
+		if (!entities[i].sceneIndependent)
+		{
+			entityRegistry.destroy(entities[i].entity);
+			it = entities.begin() + i;
+			entities.erase(it);
+		}
+	}
+}
+
+//destroys all entities including scene independent ones
+void EntityManager::DestroyAllEntitiesIndependent()
+{
+	if (entities.size() < 1)
+		return;
+
 	entities.clear();
 	entityRegistry.clear();
 }
@@ -155,6 +206,60 @@ bool EntityManager::IsLayer(const string& name)
 		if (layers[i] == name)
 			return true;
 	}
+
+	return false;
+}
+
+//adds a Script to the entity
+void EntityManager::AddScript(const string& entityName, void* script, const string name)
+{
+	if (HasScript(entityName, name))
+	{
+		Logger::LogErrorAlways("Script", entityName + " already has a Script instance named " + name + '.');
+		return;
+	}
+
+	Entity* e = GetEntity(entityName);
+	e->scripts.script = script;
+	e->scripts.name = name;
+}
+
+//removes a Script
+void EntityManager::RemoveScript(const string& entityName, const string name)
+{
+	if (!HasScript(entityName, name))
+	{
+		Logger::LogErrorAlways("Script", entityName + " does not have a Script instance named " + name + '.');
+		return;
+	}
+
+	Entity* e = GetEntity(entityName);
+	e->scripts.~Script();
+}
+
+//gets a Script
+void* EntityManager::GetScript(const string& entityName, const string name)
+{
+	if (!HasScript(entityName, name))
+	{
+		Logger::LogErrorAlways("Script", entityName + " does not have a Script instance named " + name + '.');
+		return nullptr;
+	}
+
+	Entity* e = GetEntity(entityName);
+	return e->scripts.script;
+}
+
+//checks if a entity has a Script
+bool EntityManager::HasScript(const string& entityName, const string name)
+{
+	Entity* e = GetEntity(entityName);
+	
+	if (!e->scripts.script)
+		return false;
+
+	if (e->scripts.name == name)
+		return true;
 
 	return false;
 }

@@ -8,12 +8,15 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <Core\ECS\Components\Script.h>
 
 //defines a entity
 struct Entity
 {
 	std::string name = "Entity";
 	entt::entity entity{ 0 };
+	bool sceneIndependent = false; //allows the entity to exist outside of scenes
+	Script scripts;
 
 	//Constructor
 	Entity(const std::string n, entt::entity& e)
@@ -31,14 +34,14 @@ struct Entity
 
 	//adds a component || returns a pointer
 	template<typename Comp, typename... Args>
-	Comp* AddComponet(Args&&... args)
+	Comp* AddComponent(Args&&... args)
 	{
 		return &EntityManager::GetReg().emplace<Comp>(entity, std::forward<Args>(args)...);
 	}
 
 	//removes a component
 	template<typename Comp>
-	inline void RemoveComponet()
+	inline void RemoveComponent()
 	{
 		if (!EntityManager::GetReg().valid(entity))
 		{
@@ -81,6 +84,16 @@ struct Entity
 	{
 		return EntityManager::GetReg().has<Comp>(entity);
 	}
+
+	//adds a script
+	void AddScript(void* script, const std::string& name);
+	//removes a Script
+	void RemoveScript(const std::string& name);
+	//gets a Script
+	void* GetScript(const std::string& name);
+	//checks if it has a Script
+	bool HasScript(const std::string& name);
+
 };
 
 class EntityManager
@@ -106,21 +119,23 @@ public:
 	static void Destroy(std::string& name);
 	//gets a entity
 	static Entity* GetEntity(const std::string& name);
-	//destroys all entities
+	//destroys all entities || ignores scene independent ones
 	static void DestroyAllEntities();
+	//destroys all entities including scene independent ones
+	static void DestroyAllEntitiesIndependent();
 	//gets all the entities
 	static inline std::vector<Entity>& GetAllEntities() { return entities; }
 
 	//adds a component
 	template<typename Comp, typename... Args>
-	static inline void AddComponet(const char* name, Args&&... args)
+	static inline void AddComponent(const char* name, Args&&... args)
 	{
 		entityRegistry.emplace<Comp>(GetEntity(name)->entity, std::forward<Args>(args)...);
 	}
 
 	//adds a component
 	template<typename Comp, typename... Args>
-	static inline void AddComponet(const std::string& name, Args&&... args)
+	static inline void AddComponent(const std::string& name, Args&&... args)
 	{
 		entityRegistry.emplace<Comp>(GetEntity(name)->entity, std::forward<Args>(args)...);
 	}
@@ -149,14 +164,14 @@ public:
 
 	//removes the component
 	template<typename Comp>
-	static inline void RemoveComponet(const char* name)
+	static inline void RemoveComponent(const char* name)
 	{
 		entityRegistry.remove<Comp>(GetEntity(name)->entity);
 	}
 
 	//removes the component
 	template<typename Comp>
-	static inline void RemoveComponet(const std::string& name)
+	static inline void RemoveComponent(const std::string& name)
 	{
 		entityRegistry.remove<Comp>(GetEntity(name)->entity);
 	}
@@ -168,6 +183,15 @@ public:
 
 	//gets all entities by layer
 
+	//adds a Script to the entity
+	static void AddScript(const std::string& entityName, void* script, const std::string name);
+	//removes a Script
+	static void RemoveScript(const std::string& entityName, const std::string name);
+	//gets a Script
+	static void* GetScript(const std::string& entityName, const std::string name);
+	//checks if a entity has a Script
+	static bool HasScript(const std::string& entityName, const std::string name);
+
 private:
 
 	//return if a entity has the name already
@@ -175,6 +199,7 @@ private:
 
 	//returns if a layer already exists
 	static bool IsLayer(const std::string& name);
+
 };
 
 #endif

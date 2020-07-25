@@ -168,9 +168,12 @@ void SpriteRenderer::Render()
 			rotate(model, radians(trans.rotation.x), vec3(0.0f, 0.0f, 1.0f)) *
 			scale(model, trans.scale * 50.0f);
 
-		lastShader->SetInt("Sprite", sprite.textureSlot);
-		//lastShader->SetVector3("Color", sprite.color);
-		lastShader->SetMatrix4("PVM", projectionView * model); 
+		if (lastShader)
+		{
+			lastShader->SetInt("Sprite", sprite.textureSlot);
+			//lastShader->SetVector3("Color", sprite.color);
+			lastShader->SetMatrix4("PVM", projectionView * model);
+		}
 
 		//draw call
 		context->IndexBufferDrawCall(0, spriteIndexBuffer->GetCount());
