@@ -4,11 +4,18 @@
 #include <Core\ECS\EntityManager.h>
 #include <Core\Logger.h>
 
+#include <Core\ECS\Components\Transform.h>
+
+#include <SmokGUI\Core\GUIRenderer.h>
+
+#include <glm.hpp>
+
 #ifndef SMOK_DIST
+#include "Editor\Editor.h"
 #include <iostream>
 #endif
 
-using namespace std;
+using namespace std; using namespace glm;
 
 const unsigned int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 800;
 
@@ -20,6 +27,11 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 	//load assets
 
 	//link Systems
+	GUIRenderer::Init();
+
+#ifndef SMOK_DIST
+	Editor::Init();
+#endif
 
 	//load scene
 
@@ -33,6 +45,10 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 	AssetManager::DestroyAllAssets();
 
 	//clean up Systems
+#ifndef SMOK_DIST
+	Editor::Shutdown();
+#endif
+	GUIRenderer::Shutdown();
 
 	//clean up app
 	Application::Destroy();

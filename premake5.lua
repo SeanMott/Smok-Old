@@ -1,6 +1,6 @@
 workspace "Smok"
-    architecture "x86_64"
-    --architecture "x86"
+    --architecture "x86_64"
+    architecture "x86"
     startproject "Sandbox"
 
     configurations
@@ -300,7 +300,7 @@ includedirs
     "%{includeDir.entt}",
     "%{includeDir.ImGUI}",
     "SmokCore/src",
-    "Smok2D/src",
+    "Smok3D/src",
     "SmokGUI/src",
     "Sandbox/src"
 }
@@ -308,7 +308,7 @@ includedirs
 links
 {
     "SmokCore",
-    "Smok2D",
+    "Smok3D",
     "SmokGUI"
 }
 
