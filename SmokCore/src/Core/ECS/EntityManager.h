@@ -10,11 +10,15 @@
 #include <string>
 #include <Core\ECS\Components\Script.h>
 
+#include <Core\Logger.h>
+
+#define ENTITY(n) EntityManager::GetEntity(n)
+
 //defines a entity
 struct Entity
 {
 	std::string name = "Entity";
-	entt::entity entity{ 0 };
+	entt::entity entity{ entt::null };
 	bool sceneIndependent = false; //allows the entity to exist outside of scenes
 	Script scripts;
 
@@ -30,6 +34,18 @@ struct Entity
 	{
 		name = n;
 		entity = e;
+	}
+
+	//Constructor
+	Entity(const std::string n)
+	{
+		name = n;
+	}
+
+	//Constructor
+	Entity(const char* n)
+	{
+		name = n;
 	}
 
 	//adds a component || returns a pointer

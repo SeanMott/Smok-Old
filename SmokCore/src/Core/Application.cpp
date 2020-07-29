@@ -7,11 +7,21 @@
 #include <Core\ECS\EntityManager.h>
 #include <Core\Input.h>
 
+#include <string>
+
+using namespace std;
+
 //#include <future>
 
 const float Application::FIXED_UPDATE_RATE = 60.0f;
 
 FrameBuffer* Application::customeFrameBuffer = nullptr;
+
+/*float avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
+if (avgFPS > 2000000)
+{
+	avgFPS = 0;
+}*/
 
 //inits the application
 void Application::Init(const unsigned int width, const int height, const std::string& name)

@@ -6,6 +6,21 @@
 #include <string>
 #include <Renderer\FrameBuffer.h>
 
+//defines the differnt main prototypes
+#ifdef Window_Build
+
+#define EntryPoint int main(int args, char* argv[])
+
+#elif Mac_Build
+
+#define EntryPoint int main(int args, char* argv[])
+
+#elif Linux_Build
+
+#define EntryPoint int main(int args, char* argv[])
+
+#endif
+
 class Application
 {
 	//vars

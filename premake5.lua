@@ -1,6 +1,6 @@
 workspace "Smok"
-    --architecture "x86_64"
-    architecture "x86"
+    architecture "x86_64"
+    --architecture "x86"
     startproject "Sandbox"
 
     configurations
@@ -298,6 +298,7 @@ includedirs
     "%{includeDir.glm}",
     "%{includeDir.FastDelegate}",
     "%{includeDir.entt}",
+    "%{includeDir.ImGUI}",
     "SmokCore/src",
     "Smok2D/src",
     "SmokGUI/src",

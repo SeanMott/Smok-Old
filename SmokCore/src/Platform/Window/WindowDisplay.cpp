@@ -14,6 +14,7 @@ bool WindowDisplay::Init(const unsigned int width, const unsigned int height, co
 	//init GLFW if not
 	if (!GLFWIsInit)
 	{
+
 		if (!glfwInit())
 		{
 			Logger::LogErrorAlways("Display", "GLFW could not be initalized.");

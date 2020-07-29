@@ -41,11 +41,6 @@ public:
 	//shutsdown the renderer
 	static void Shutdown();
 
-	//starts a section of render code
-	static void Begin();
-	//ends a section of render code
-	static void End();
-
 	//updates the GUI flags for ImGUI
 	static void UpdateImGUIFlags();
 	//updates the style
@@ -60,6 +55,11 @@ public:
 	static inline bool GetFlagState(GUIFlags flag) { return flags[(int)flag]; }
 
 private:
+
+	//starts a section of render code
+	static void Begin();
+	//ends a section of render code
+	static void End();
 
 	//events
 	static void KeyPressed(int key, bool isRepeat);
