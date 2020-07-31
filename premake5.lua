@@ -300,7 +300,7 @@ includedirs
     "%{includeDir.entt}",
     "%{includeDir.ImGUI}",
     "SmokCore/src",
-    "Smok3D/src",
+    "Smok2D/src",
     "SmokGUI/src",
     "Sandbox/src"
 }
@@ -308,7 +308,7 @@ includedirs
 links
 {
     "SmokCore",
-    "Smok3D",
+    "Smok2D",
     "SmokGUI"
 }
 
