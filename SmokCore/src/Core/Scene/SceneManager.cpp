@@ -5,10 +5,11 @@
 
 using namespace std;
 
-unsigned int SceneManager::scene = 0;
-vector<Scene*> SceneManager::scenes;
+string SceneManager::scene = "";
+unordered_map<string, Scene*> SceneManager::scenes;
 
-void SceneManager::AddToSceneList(Scene* s)
+
+void SceneManager::AddToSceneList(const std::string& name, Scene* s)
 {
 	if (!s)
 	{
@@ -16,76 +17,61 @@ void SceneManager::AddToSceneList(Scene* s)
 		return;
 	}
 
-	for (unsigned int i = 0; i < scenes.size(); i++)
-	{
-		if (scenes[i] == s)
-		{
-			Logger::LogErrorAlways("Scene", "That scene is already in the list.");
-			return;
-		}
-	}
-
-	scenes.emplace_back(s);
+	scenes[name] = s;
 }
 
-void SceneManager::RemoveFromSceneList(Scene* s)
+void SceneManager::RemoveFromSceneList(const std::string& name)
 {
-	for (unsigned int i = 0; i < scenes.size(); i++)
+	if (!scenes[name])
 	{
-		if (scenes[i] == s)
-		{
-			vector<Scene*>::iterator it = scenes.begin() + i;
-			if (i == scene)
-				UnloadScene();
-			delete scenes[i];
-			scenes.erase(it);
-		}
-	}
-}
-
-void SceneManager::LoadScene(Scene* s)
-{
-	if (!s)
-	{
-		Logger::LogErrorAlways("Scene", "The scene that was passed in to be loaded is a nullptr.");
+		Logger::LogErrorAlways("Scene", "No scene was found that is named " + name + '.');
 		return;
 	}
 
-	AddToSceneList(s);
-	ScriptEndEvent::Call();
-	scenes[scene]->OnSceneEnd();
+	scenes.erase(name);
+}
 
-	scene = scenes.size() - 1;
-	scenes[scene]->OnSceneStart();
+void SceneManager::LoadScene(const std::string& name)
+{
+	if (!scenes[name])
+	{
+		Logger::LogErrorAlways("Scene", "No scene was found that is named " + name + '.');
+		return;
+	}
+
+	if (scene != "")
+	{
+		ScriptEndEvent::Call();
+		scenes[name]->OnSceneEnd();
+	}
+
+	scenes[name]->OnSceneStart();
 	ScriptStartEvent::Call();
 }
 
-void SceneManager::LoadScene(unsigned int s)
+void SceneManager::LoadScene(const char* name)
 {
-	if (s > scenes.size())
+	if (!scenes[name])
 	{
-		Logger::LogErrorAlways("Scene", to_string(s) + " is not a valid scene in the scene list.");
+		Logger::LogErrorAlways("Scene", "No scene was found that is named " + (string)name + '.');
 		return;
 	}
 
-	scene = s;
+	if (scene != "")
+	{
+		ScriptEndEvent::Call();
+		scenes[name]->OnSceneEnd();
+	}
 
-	ScriptEndEvent::Call();
-	scenes[scene]->OnSceneEnd();
-
-	scene = scenes.size() - 1;
-	scenes[scene]->OnSceneStart();
+	scenes[name]->OnSceneStart();
 	ScriptStartEvent::Call();
 }
 
 void SceneManager::UnloadScene()
 {
-	if (scene > scenes.size())
-	{
-		Logger::LogErrorAlways("Scene", "Current scene is not a valid scene in the scene list.");
+	if (scene == "")
 		return;
-	}
 
 	scenes[scene]->OnSceneEnd();
-	scene = 0;
+	scene = "";
 }

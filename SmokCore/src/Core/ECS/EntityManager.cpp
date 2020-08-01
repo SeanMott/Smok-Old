@@ -98,7 +98,7 @@ void EntityManager::Destroy(std::string& name)
 	{
 		if (entities[i].name == name)
 		{
-			entityRegistry.destroy(entities[i].entity);
+			entityRegistry.destroy(entities[i].entityHandle);
 			vector<Entity>::iterator it = entities.begin() + i;
 			entities.erase(it);
 			return;
@@ -107,6 +107,24 @@ void EntityManager::Destroy(std::string& name)
 
 	Logger::LogErrorAlways("Entity", name + " is not a entity.");
 	//printf("%s is not a entity\n", name.c_str());
+}
+
+//destroy entity
+void EntityManager::Destroy(entt::entity& entity)
+{
+	if (entityRegistry.valid(entity))
+	{
+		for (unsigned int i = 0; i < entities.size(); i++)
+		{
+			if (entities[i].entityHandle == entity)
+			{
+				entityRegistry.destroy(entities[i].entityHandle);
+				vector<Entity>::iterator it = entities.begin() + i;
+				entities.erase(it);
+				return;
+			}
+		}
+	}
 }
 
 //gets a entity
@@ -148,7 +166,7 @@ void EntityManager::DestroyAllEntities()
 	{
 		if (!entities[i].sceneIndependent)
 		{
-			entityRegistry.destroy(entities[i].entity);
+			entityRegistry.destroy(entities[i].entityHandle);
 			it = entities.begin() + i;
 			entities.erase(it);
 		}
