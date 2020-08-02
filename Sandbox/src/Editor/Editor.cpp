@@ -48,7 +48,7 @@ void Editor::Draw()
 		ImGui::Text("Entity: %s\nX: %f, Y: %f, Z: %f", selectedEntity.name.c_str(), selectedTrans->position.x, selectedTrans->position.y, selectedTrans->position.z);
 
 	//allows the Entity to be deleted
-	if (ImGui::Button("Delete") && EntityManager::GetReg().valid(selectedEntity.entity))
+	if (ImGui::Button("Delete") && EntityManager::GetReg().valid(selectedEntity.entityHandle))
 		EntityManager::Destroy(selectedEntity.name);
 
 	ImGui::End();
