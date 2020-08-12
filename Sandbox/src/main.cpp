@@ -1,6 +1,7 @@
 
 #include <Core\Application.h>
 #include <Core\AssetManager.h>
+#include <Core\Scene\SceneManager.h>
 #include <Core\ECS\EntityManager.h>
 #include <Core\Logger.h>
 
