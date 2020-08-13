@@ -45,6 +45,9 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 	//clean up assets
 	AssetManager::DestroyAllAssets();
 
+	//clear scene
+	SceneManager::Clear();
+
 	//clean up Systems
 #ifndef SMOK_DIST
 	Editor::Shutdown();
