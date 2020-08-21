@@ -20,6 +20,7 @@ struct Entity
 	std::string name = "Entity";
 	entt::entity entityHandle{ entt::null };
 	bool sceneIndependent = false; //allows the entity to exist outside of scenes
+	std::string layer = "Default";
 	Script scripts;
 
 	//Constructor
@@ -216,8 +217,8 @@ public:
 	static void AddLayer(const std::string& name);
 	//removes a layer
 	static void RemoveLayer(const std::string& name);
-
 	//gets all entities by layer
+	static std::vector<Entity*> GetAllEntitiesByLayer(const std::string& layer);
 
 	//adds a Script to the entity
 	static void AddScript(const std::string& entityName, void* script, const std::string name);

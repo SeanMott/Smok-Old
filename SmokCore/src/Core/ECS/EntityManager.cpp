@@ -216,9 +216,29 @@ void EntityManager::RemoveLayer(const string& name)
 	}
 }
 
+//gets all entities by layer
+vector<Entity*> EntityManager::GetAllEntitiesByLayer(const string& layer)
+{
+	vector<Entity*> e;
+
+	if (entities.size() < 1)
+		return e;
+
+	for (unsigned int i = 0; i < entities.size(); i++)
+	{
+		if (entities[i].layer == layer)
+			e.emplace_back(&entities[i]);
+	}
+
+	return e;
+}
+
 //returns if a layer already exists
 bool EntityManager::IsLayer(const string& name)
 {
+	if (layers.size() < 1)
+		return false;
+
 	for (unsigned int i = 0; i < layers.size(); i++)
 	{
 		if (layers[i] == name)
