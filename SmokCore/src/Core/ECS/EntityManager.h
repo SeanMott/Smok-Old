@@ -20,32 +20,37 @@ struct Entity
 	std::string name = "Entity";
 	entt::entity entityHandle{ entt::null };
 	bool sceneIndependent = false; //allows the entity to exist outside of scenes
+	std::string layer = "Default";
 	Script scripts;
 
 	//Constructor
-	Entity(const std::string n, entt::entity& e)
+	Entity(const std::string n, entt::entity& e, bool independent = false)
 	{
 		name = n;
 		entityHandle = e;
+		sceneIndependent = independent;
 	}
 
 	//Constructor
-	Entity(const char* n, entt::entity& e)
+	Entity(const char* n, entt::entity& e, bool independent = false)
 	{
 		name = n;
 		entityHandle = e;
+		sceneIndependent = independent;
 	}
 
 	//Constructor
-	Entity(const std::string n)
+	Entity(const std::string n, bool independent = false)
 	{
 		name = n;
+		sceneIndependent = independent;
 	}
 
 	//Constructor
-	Entity(const char* n)
+	Entity(const char* n, bool independent = false)
 	{
 		name = n;
+		sceneIndependent = independent;
 	}
 
 	//adds a component || returns a pointer
@@ -131,9 +136,9 @@ public:
 	static inline std::vector<std::string>& GetLayers() { return layers; }
 
 	//create entity
-	static Entity& Create(const char* name);
+	static Entity& Create(const char* name, bool isIndependent = false);
 	//create entity
-	static Entity& Create(const std::string& name);
+	static Entity& Create(const std::string& name, bool isIndependent = false);
 	//destroy entity
 	static void Destroy(std::string& name);
 	//destroy entity
@@ -178,12 +183,12 @@ public:
 
 	//gets a component
 	template<typename Comp>
-	static inline Comp& GetComponent(const char* name)
+	static inline Comp* GetComponent(const char* name)
 	{
 		for (unsigned int i = 0; i < entities.size(); i++)
 		{
 			if(entities[i].name == name)
-				return entityRegistry.get<Comp>(entities[i].entityHandle);
+				return &entityRegistry.get<Comp>(entities[i].entityHandle);
 		}
 	}
 
@@ -216,8 +221,8 @@ public:
 	static void AddLayer(const std::string& name);
 	//removes a layer
 	static void RemoveLayer(const std::string& name);
-
 	//gets all entities by layer
+	static std::vector<Entity*> GetAllEntitiesByLayer(const std::string& layer);
 
 	//adds a Script to the entity
 	static void AddScript(const std::string& entityName, void* script, const std::string name);
