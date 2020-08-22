@@ -22,7 +22,7 @@ Smok3D has all the 3D based componets and systems. This is mesh renderer, 3D phy
 
 # Scripts, Components, and Systems
 
-Smok has three ways to interact with the engine, Systems, Components, and Scripts. Systems are hooked into engine events and use the Components that are attachted to entities. Scripts are attachted to entities like Components but have specal events that only trigger for Scripts. They are similar to Unreal, Unity, or Godot scripts, they don't require inhereting from a class. The only thing you have to make sure is that the methods hooked into a event matchs the return and paramater type. Otherwise you can change the name of the method and the paramaters.
+Smok has three ways to interact with the engine, Systems, Components, and Scripts. Systems are hooked into engine events and use the Components that are attachted to entities. Scripts are created as pointers in a scene, and have specal events that only trigger for Scripts. They are similar to Unreal, Unity, or Godot scripts, they don't require inhereting from a class. The only thing you have to make sure is that the methods hooked into a event matchs the return and paramater type. Otherwise you can change the name of the method and the paramaters.
 
 
 # Libraries
@@ -33,3 +33,4 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 - [stb - Image Loading](https://github.com/nothings/stb)
 - [entt - ECS](https://github.com/skypjack/entt)
 - [Fast Delegate - C++ Delegates](https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible)
+- [Flexible Reflection - Reflection](https://github.com/preshing/FlexibleReflection)
