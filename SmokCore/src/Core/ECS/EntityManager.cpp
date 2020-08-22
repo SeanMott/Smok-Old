@@ -37,7 +37,7 @@ bool Entity::HasScript(const string& name)
 //-------------ENTITY MANAGER---------------
 
 //create entity
-Entity& EntityManager::Create(const char* name)
+Entity& EntityManager::Create(const char* name, bool isIndependent)
 {
 	if (IsEntity(name))
 	{
@@ -55,17 +55,17 @@ Entity& EntityManager::Create(const char* name)
 		}
 
 		entity e = entityRegistry.create();
-		entities.emplace_back(n, e);
+		entities.emplace_back(n, e, isIndependent);
 		return entities[entities.size() - 1];
 	}
 
 	entity e = entityRegistry.create();
-	entities.emplace_back(name, e);
+	entities.emplace_back(name, e, isIndependent);
 	return entities[entities.size() - 1];
 }
 
 //create entity
-Entity& EntityManager::Create(const string& name)
+Entity& EntityManager::Create(const string& name, bool isIndependent)
 {
 	if (IsEntity(name))
 	{
@@ -82,12 +82,12 @@ Entity& EntityManager::Create(const string& name)
 		}
 
 		entity e = entityRegistry.create();
-		entities.emplace_back(n, e);
+		entities.emplace_back(n, e, isIndependent);
 		return entities[entities.size() - 1];
 	}
 
 	entity e = entityRegistry.create();
-	entities.emplace_back(name, e);
+	entities.emplace_back(name, e, isIndependent);
 	return entities[entities.size() - 1];
 }
 
