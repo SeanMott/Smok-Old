@@ -68,7 +68,7 @@ void Editor::Draw()
 			if (selectedEntity.HasComponent<Transform>())
 			{
 				selectedTrans = selectedEntity.GetComponent<Transform>();
-				if(editorCam->HasComponent<Transform>())
+				if (editorCam->HasComponent<Transform>())
 					editorCam->GetComponent<Transform>()->position = vec3(selectedTrans->position.x / 2, selectedTrans->position.y / 2, 0.0f);
 			}
 			else
@@ -157,18 +157,28 @@ void Editor::CamCon(float deltaTime)
 	if (!trans)
 		return;
 
-	//moves editor cam up
+	//moves editor camera
 	if (Input::GetKey(SMOK_KEY_W))
 		trans->position -= vec3(0.0f, moveSpeed, 0.0f);
-	//moves editor cam down
 	else if (Input::GetKey(SMOK_KEY_S))
 		trans->position += vec3(0.0f, moveSpeed, 0.0f);
-	//moves editor cam left
 	else if (Input::GetKey(SMOK_KEY_A))
 		trans->position -= vec3(moveSpeed, 0.0f, 0.0f);
-	//moves editor cam right
 	else if (Input::GetKey(SMOK_KEY_D))
 		trans->position += vec3(moveSpeed, 0.0f, 0.0f);
+
+	//moves selected object
+	if (!selectedTrans)
+		return;
+
+	if (Input::GetKey(SMOK_KEY_UP))
+		selectedTrans->position -= vec3(0.0f, moveSpeed, 0.0f);
+	else if (Input::GetKey(SMOK_KEY_DOWN))
+		selectedTrans->position += vec3(0.0f, moveSpeed, 0.0f);
+	else if (Input::GetKey(SMOK_KEY_LEFT))
+		selectedTrans->position -= vec3(moveSpeed, 0.0f, 0.0f);
+	else if (Input::GetKey(SMOK_KEY_RIGHT))
+		selectedTrans->position += vec3(moveSpeed, 0.0f, 0.0f);
 }
 
 #endif
