@@ -33,4 +33,3 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 - [stb - Image Loading](https://github.com/nothings/stb)
 - [entt - ECS](https://github.com/skypjack/entt)
 - [Fast Delegate - C++ Delegates](https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible)
-- [Flexible Reflection - Reflection](https://github.com/preshing/FlexibleReflection)
