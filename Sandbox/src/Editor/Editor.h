@@ -15,6 +15,11 @@ private:
 	static Entity selectedEntity;
 	static Transform* selectedTrans;
 
+	static Entity* editorCam;
+	//static Transform* editorTrans;
+
+	static float moveSpeed;
+
 	//methods
 public:
 
@@ -25,6 +30,10 @@ public:
 
 	//draws the Editor
 	static void Draw();
+	//allows cams to be switched
+	static void CamSwitch(int key, bool isRepeat);
+	//allows the editor cam to be controlled
+	static void CamCon(float deltaTime);
 
 };
 

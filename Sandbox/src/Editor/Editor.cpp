@@ -3,16 +3,41 @@
 #include "Editor.h"
 
 #include <Core\Events\EngineEvents.h>
+#include <Core\Events\ScriptEvents.h>
+#include <Core\Events\InputEvents.h>
+#include <Core\Input.h>
+
+#include <Renderer\Display.h>
+
+#include <Core\ECS\EntityManager.h>
+#include <Core\ECS\Components\Transform.h>
+#include <Smok2D\Components\OrthographicCamera.h>
+#include <Smok2D\Components\Sprite.h>
+
 #include <imgui.h>
 
-using namespace std;
+using namespace std; using namespace glm;
 
 Entity Editor::selectedEntity("Entity");
 Transform* Editor::selectedTrans = nullptr;
 
+Entity* Editor::editorCam = nullptr;
+//Transform* Editor::editorTrans = nullptr;
+
+float Editor::moveSpeed = 5.0f;
+
+static bool useEditorCam = false;
+
 void Editor::Init()
 {
+	EntityManager::Create("editorCam");
+	editorCam = EntityManager::GetEntity("editorCam");
+	editorCam->AddComponent<Transform>(vec3(DisplayI.GetScreenWidth() / 2, DisplayI.GetScreenHeight() / 2, 0.0f));
+	editorCam->AddComponent<OrthographicCamera>((float)DisplayI.GetScreenWidth(), (float)DisplayI.GetScreenHeight(), false);
+
 	ECSGUIRenderEvent::AddMethod(&Editor::Draw);
+	KeyPressEvent::AddMethod(&Editor::CamSwitch);
+	ScriptUpdateEvent::AddMethod(&Editor::CamCon);
 }
 
 void Editor::Shutdown()
@@ -24,36 +49,126 @@ void Editor::Draw()
 {
 	//menu bar
 
+	//camera
+	ImGui::Begin("Current Camera");
+	ImGui::Text("Current Camera: %s", (useEditorCam == true ? "Editor" : "Scene"));
+	ImGui::End();
+
 	//Entity Hierarchy
 	ImGui::Begin("Entity Hierarchy");
 	vector<Entity> entities = EntityManager::GetAllEntities();
 	for (unsigned int i = 0; i < entities.size(); i++)
 	{
+		if (entities[i].layer == "Editor")
+			continue;
+
 		if (ImGui::Button(entities[i].name.c_str()))
 		{
 			selectedEntity = entities[i];
 			if (selectedEntity.HasComponent<Transform>())
+			{
 				selectedTrans = selectedEntity.GetComponent<Transform>();
+				if(editorCam->HasComponent<Transform>())
+					editorCam->GetComponent<Transform>()->position = vec3(selectedTrans->position.x / 2, selectedTrans->position.y / 2, 0.0f);
+			}
 			else
 				selectedTrans = nullptr;
 		}
 	}
 	ImGui::End();
 
-	//Selected Entity
-	ImGui::Begin("Selected Entity");
-	if (!selectedTrans)
-		ImGui::Text("Entity: %s\nX: NA, Y: NA, Z: NA", selectedEntity.name.c_str());
-	else
-		ImGui::Text("Entity: %s\nX: %f, Y: %f, Z: %f", selectedEntity.name.c_str(), selectedTrans->position.x, selectedTrans->position.y, selectedTrans->position.z);
+	//Selected Entity Inspecter
+	ImGui::Begin("Inspecter");
 
-	//allows the Entity to be deleted
-	if (ImGui::Button("Delete") && EntityManager::GetReg().valid(selectedEntity.entityHandle))
-		EntityManager::Destroy(selectedEntity.name);
+	//Entity name and layer
+	ImGui::Text("Name: %s\nLayer:%s", selectedEntity.name.c_str(), selectedEntity.layer.c_str());
+
+	if (!EntityManager::GetReg().valid(selectedEntity.entityHandle))
+	{
+		ImGui::End();
+		return;
+	}
+
+	//Transform Component || make theses changeable
+	if (selectedTrans)
+		ImGui::Text("Transform:\nX: %f, Y: %f, Z: %f\nX: %f, Y: %f, Z: %f\nX: %f, Y: %f, Z: %f",
+			selectedTrans->position.x, selectedTrans->position.y, selectedTrans->position.z,
+			selectedTrans->rotation.x, selectedTrans->rotation.y, selectedTrans->rotation.z,
+			selectedTrans->scale.x, selectedTrans->scale.y, selectedTrans->scale.z
+		);
+
+#ifdef Smok2D_Link
+	//Sprite Component || make theses changeable
+	if (selectedEntity.HasComponent<Sprite>())
+	{
+		Sprite* sprite = selectedEntity.GetComponent<Sprite>();
+		ImGui::Text("Sprite:\nTexture: %s, Slot: %u\nShader: %s\nColor:\n\tR: %f, G: %f, B: %f, A: %f\nLayer: %u\nIs Active: %s",
+			sprite->texture.c_str(), sprite->textureSlot, sprite->shader.c_str(),
+			sprite->color.r, sprite->color.g, sprite->color.b, 1.0f,
+			sprite->layer, (sprite->isActive == true ? "Yes" : "No"));
+	}
+
+	//Orthographic Camera Component || make theses changeable
+	if (selectedEntity.HasComponent<OrthographicCamera>())
+	{
+		OrthographicCamera* cam = selectedEntity.GetComponent<OrthographicCamera>();
+		ImGui::Text("Orthographic Camera:\nView:\n\tX: %f, Y: %f\nIs Active: %s",
+			cam->viewLength, cam->viewHeight, (cam->isActive == true ? "Yes" : "No"));
+	}
+
+	//Rigidbody Component || make theses changeable
+#endif
+
+#ifdef Smok3D_link
+	//Mesh Component || make theses changeable
+
+	//Perspective Camera Component || make theses changeable
+
+	//Rigidbody Component || make theses changeable
+#endif
 
 	ImGui::End();
+}
 
-	//Selected Entity Inspecter
+void Editor::CamSwitch(int key, bool isRepeat)
+{
+	//switchs to editor and scene cams
+	if (key == SMOK_KEY_E)
+	{
+		auto c = EntityManager::GetReg().view<OrthographicCamera>();
+
+		for (auto cam : c)
+		{
+			auto& camera = c.get<OrthographicCamera>(cam);
+			camera.isActive = !camera.isActive;
+		}
+
+		if (c.size() > 1)
+			useEditorCam = !useEditorCam;
+	}
+}
+
+void Editor::CamCon(float deltaTime)
+{
+	if (!editorCam->HasComponent<Transform>())
+		return;
+
+	Transform* trans = EntityManager::GetComponent<Transform>("editorCam");
+	if (!trans)
+		return;
+
+	//moves editor cam up
+	if (Input::GetKey(SMOK_KEY_W))
+		trans->position -= vec3(0.0f, moveSpeed, 0.0f);
+	//moves editor cam down
+	else if (Input::GetKey(SMOK_KEY_S))
+		trans->position += vec3(0.0f, moveSpeed, 0.0f);
+	//moves editor cam left
+	else if (Input::GetKey(SMOK_KEY_A))
+		trans->position -= vec3(moveSpeed, 0.0f, 0.0f);
+	//moves editor cam right
+	else if (Input::GetKey(SMOK_KEY_D))
+		trans->position += vec3(moveSpeed, 0.0f, 0.0f);
 }
 
 #endif
