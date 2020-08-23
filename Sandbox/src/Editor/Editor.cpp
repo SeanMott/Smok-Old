@@ -34,6 +34,8 @@ void Editor::Init()
 	editorCam = EntityManager::GetEntity("editorCam");
 	editorCam->AddComponent<Transform>(vec3(DisplayI.GetScreenWidth() / 2, DisplayI.GetScreenHeight() / 2, 0.0f));
 	editorCam->AddComponent<OrthographicCamera>((float)DisplayI.GetScreenWidth(), (float)DisplayI.GetScreenHeight(), false);
+	editorCam->layer = "Editor";
+
 
 	ECSGUIRenderEvent::AddMethod(&Editor::Draw);
 	KeyPressEvent::AddMethod(&Editor::CamSwitch);
