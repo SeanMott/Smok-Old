@@ -1,13 +1,14 @@
 
 #include <Core\Application.h>
 #include <Core\AssetManager.h>
-#include <Core\Scene\SceneManager.h>
 #include <Core\ECS\EntityManager.h>
 #include <Core\Logger.h>
 
 #include <Core\ECS\Components\Transform.h>
 
 #include <SmokGUI\Core\GUIRenderer.h>
+
+#include "Scenes\SceneManager.h"
 
 #include <glm.hpp>
 
@@ -26,6 +27,7 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 	Application::Init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//load assets
+	//AssetManager::LoadAssetFile(/*filepath to asset file*/);
 
 	//link Systems
 	GUIRenderer::Init();
@@ -33,8 +35,6 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 #ifndef SMOK_DIST
 	Editor::Init();
 #endif
-
-	//load scene
 
 	//game loop
 	Application::Run();
@@ -46,7 +46,7 @@ int main(int args, char* argv[]) //use EntryPoint in other apps for multiplatfor
 	AssetManager::DestroyAllAssets();
 
 	//clear scene
-	SceneManager::Clear();
+	SceneManager::Destroy();
 
 	//clean up Systems
 #ifndef SMOK_DIST
