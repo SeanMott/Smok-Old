@@ -24,6 +24,11 @@ public:
 	virtual void Bind(unsigned int slot = 0) = 0;
 	//unbinds a texture
 	virtual void UnBind() = 0;
+
+	//gets the height
+	virtual int GetHeight() = 0;
+	//gets the width
+	virtual int GetWidth() = 0;
 };
 
 #endif
