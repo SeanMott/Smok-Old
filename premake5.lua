@@ -250,6 +250,12 @@ project "Smok3D"
         "SmokCore"
     }
 
+    defines
+    {
+    "Smok2D_Link"--,
+    --"Smok3D_Link"
+    }
+
     filter "system:windows"
         cppdialect "C++17"
         staticruntime "On"
