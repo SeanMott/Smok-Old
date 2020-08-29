@@ -88,8 +88,8 @@ void SceneParser::LoadScene(const std::string& source)
 		if (words[i] == "Entity")
 		{
 			i++;
-			EntityManager::Create(words[i]);
-			currentEntity = EntityManager::GetEntity(words[i]);
+			Entity en = EntityManager::Create(words[i]);
+			currentEntity = EntityManager::GetEntity(en.name);
 			i += 2;
 			currentEntity->layer = words[i];
 		}
