@@ -49,8 +49,8 @@ void SpriteRenderer::Init()
 	};
 
 	BufferLayout layout = {
-		{ShaderDataType::Float3, "Position"},
-		{ShaderDataType::Float2, "TexCoords"}
+		{ShaderDataType::Float3, "vertex"},
+		{ShaderDataType::Float2, "tex"}
 	};
 
 	spriteBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
@@ -171,8 +171,8 @@ void SpriteRenderer::Render()
 		if (lastShader)
 		{
 			lastShader->SetInt("Sprite", sprite.textureSlot);
-			//lastShader->SetVector3("Color", sprite.color);
-			lastShader->SetMatrix4("PVM", projectionView * model);
+			lastShader->SetVector3("Color", sprite.color);
+			lastShader->SetMatrix4("PVM", projection * view * model);
 		}
 
 		//draw call

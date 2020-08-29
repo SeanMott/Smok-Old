@@ -14,7 +14,7 @@ struct Transform
 	//returns the front of the entitie's Transform
 	inline glm::vec3 Front() { return position + WorldForward(); } // glm::vec3(position.x, position.y, position.z - 1.0f); }
 	//returns the back of the entitie's Transform
-	inline glm::vec3 Back() { return position + WorldBackwards(); } //glm::vec3(position.x, position.y, position.z + 1.0f); }
+	inline glm::vec3 Back() { return position + WorldBackward(); } //glm::vec3(position.x, position.y, position.z + 1.0f); }
 	//returns the left of the entitie's Transform
 	inline glm::vec3 Left() { return position + WorldLeft(); } //glm::vec3(position.x - 1.0f, position.y, position.z); }
 	//returns the right of the entitie's Transform
@@ -35,7 +35,7 @@ struct Transform
 	//returns a vec3 pointing forward (0.0f, 0.0f, -1.0f)
 	static inline glm::vec3 WorldForward() { return glm::vec3(0.0f, 0.0f, -1.0f); }
 	//returns a vec3 pointing backwards (0.0f, 0.0f, 1.0f)
-	static inline glm::vec3 WorldBackwards() { return glm::vec3(0.0f, 0.0f, 1.0f); }
+	static inline glm::vec3 WorldBackward() { return glm::vec3(0.0f, 0.0f, 1.0f); }
 };
 
 #endif

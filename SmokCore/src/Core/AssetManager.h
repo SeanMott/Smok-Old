@@ -37,6 +37,8 @@ public:
 	static void DestroyTexture(const std::string& name);
 	//gets a texture by name
 	static Texture* GetTexture(const std::string& name);
+	//gets all Textures
+	static inline std::unordered_map<std::string, Texture*>& GetAllTextures() { return textures; }
 
 	//destroys all shaders
 	static void DestroyAllShaders();

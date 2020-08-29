@@ -5,6 +5,7 @@
 #include <Core\Events\EngineEvents.h>
 #include <Core\Events\ScriptEvents.h>
 #include <Core\Events\InputEvents.h>
+#include <Core\AssetManager.h>
 #include <Core\Input.h>
 
 #include <Renderer\Display.h>
@@ -14,12 +15,15 @@
 #include <Smok2D\Components\OrthographicCamera.h>
 #include <Smok2D\Components\Sprite.h>
 
+#include "Scenes\SceneManager.h"
+
 #include <imgui.h>
 
 using namespace std; using namespace glm;
 
 Entity Editor::selectedEntity("Entity");
 Transform* Editor::selectedTrans = nullptr;
+//static string selectedTexture = "";
 
 Entity* Editor::editorCam = nullptr;
 //Transform* Editor::editorTrans = nullptr;
@@ -30,12 +34,14 @@ static bool useEditorCam = false;
 
 void Editor::Init()
 {
+	//makes Editor Cam
 	EntityManager::Create("editorCam");
 	editorCam = EntityManager::GetEntity("editorCam");
 	editorCam->AddComponent<Transform>(vec3(DisplayI.GetScreenWidth() / 2, DisplayI.GetScreenHeight() / 2, 0.0f));
 	editorCam->AddComponent<OrthographicCamera>((float)DisplayI.GetScreenWidth(), (float)DisplayI.GetScreenHeight(), false);
 	editorCam->layer = "Editor";
 
+	//makes Editor arrows
 
 	ECSGUIRenderEvent::AddMethod(&Editor::Draw);
 	KeyPressEvent::AddMethod(&Editor::CamSwitch);
@@ -49,7 +55,15 @@ void Editor::Shutdown()
 
 void Editor::Draw()
 {
-	//menu bar
+	//Scene List
+	ImGui::Begin("Scene List");
+	
+	if (ImGui::Button("Save"))
+		SceneManager::SaveScene();
+	if (ImGui::Button("Reload"))
+		SceneManager::Reload();
+
+	ImGui::End();
 
 	//camera
 	ImGui::Begin("Current Camera");
@@ -173,6 +187,7 @@ void Editor::CamCon(float deltaTime)
 	if (!selectedTrans)
 		return;
 
+	//selected move
 	if (Input::GetKey(SMOK_KEY_UP))
 		selectedTrans->position -= vec3(0.0f, moveSpeed, 0.0f);
 	else if (Input::GetKey(SMOK_KEY_DOWN))
