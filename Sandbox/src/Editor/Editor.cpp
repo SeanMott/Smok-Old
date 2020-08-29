@@ -12,8 +12,14 @@
 
 #include <Core\ECS\EntityManager.h>
 #include <Core\ECS\Components\Transform.h>
+
+#ifdef Smok2D_Link
 #include <Smok2D\Components\OrthographicCamera.h>
 #include <Smok2D\Components\Sprite.h>
+#endif
+
+#ifdef Smok3D_Link
+#endif
 
 #include "Scenes\SceneManager.h"
 
