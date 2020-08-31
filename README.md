@@ -10,15 +10,15 @@ SmokCore is the heart of the engine, it holds the Platform and Render API specif
 
 - SmokGUI
 
-SmokGUI has all the GUI based componets and systems. This is buttons, text, bars, ect. This module can be disabled by defining DISABLE_SMOK_GUI.
+SmokGUI has all the GUI based componets and systems. This is buttons, text, bars, ect.
 
 - Smok2D
 
-Smok2D has all the 2D based componets and systems. This is sprite renderer, 2D physics, tile map, ect. This module can be disabled by defining DISABLE_SMOK_2D.
+Smok2D has all the 2D based componets and systems. This is sprite renderer, 2D physics, tile map, ect.
 
 - Smok3D
 
-Smok3D has all the 3D based componets and systems. This is mesh renderer, 3D physics, particals, ect. This module can be disabled by defining DISABLE_SMOK_3D. <br >
+Smok3D has all the 3D based componets and systems. This is mesh renderer, 3D physics, particals, ect.
 
 # Scripts, Components, and Systems
 
@@ -33,3 +33,8 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 - [stb - Image Loading](https://github.com/nothings/stb)
 - [entt - ECS](https://github.com/skypjack/entt)
 - [Fast Delegate - C++ Delegates](https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible)
+
+#To Do
+
+-Batch rendering
+-Docs
