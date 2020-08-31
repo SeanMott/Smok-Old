@@ -36,5 +36,12 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 
 # To Do
 
-- Batch rendering
 - Docs
+- Batch rendering
+- Binary scene and prefab file instead of text
+- Proper API for prefab loading and saving instead of load scene
+- Sound asset load and play
+- Text component
+- Button component
+- Tilemap loading
+- JSON asset file list loading
