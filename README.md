@@ -34,7 +34,7 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 - [entt - ECS](https://github.com/skypjack/entt)
 - [Fast Delegate - C++ Delegates](https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible)
 
-#To Do
+# To Do
 
--Batch rendering
--Docs
+- Batch rendering
+- Docs
