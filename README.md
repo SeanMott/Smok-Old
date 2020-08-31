@@ -44,4 +44,4 @@ Smok has three ways to interact with the engine, Systems, Components, and Script
 - Text component
 - Button component
 - Tilemap loading
-- JSON asset file list loading
+- asset file list loading
