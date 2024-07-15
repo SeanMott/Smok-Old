@@ -1,7 +1,5 @@
 (This project has been abandoned, as all the old Bytes The Dust, Smok, and Hologram code is being condensed and cleaned up. All will fall under the Bytes The Dust SDK)
 
-CURRENTLY UNDER A REWRITE
-
 # Smok
 Smok (Polish for dragon, pronounced like smoke) is a game engine for 3D and 2D with ECS. The engine is being created as a learning experience.
 
